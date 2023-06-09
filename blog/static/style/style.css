@@ -1,0 +1,89 @@
+body {
+    background-color: #eee;
+}
+
+h1 {
+    font-size: 64px;
+    font-weight: 700;
+}
+
+.header-menu {
+    background-color: #fff;
+}
+
+.header-logo {
+    width: 30px;
+}
+
+.main-post {
+    background-color: #fff;
+    border: 1px solid #dedede;
+}
+
+.main-post img{
+    width: 100%;
+    height: 400px;
+    padding: 0 15px 0 0;
+    object-fit: cover;
+    object-position: center;
+}
+
+.main-post span{
+    font-size: 15px;
+    font-weight: 300;
+}
+
+.main-post h2{
+    padding: 15px 0;
+    font-size: 46px;
+    font-weight: 700;
+}
+
+.main-post p{
+    font-size: 18px;
+    font-weight: 300;
+}
+
+.btn-main-post {
+    border: 2px solid #ddd;
+    color: #7a7a7a;
+    font-weight: 300;
+}
+
+.btn-main-post:hover {
+    background: #eee;
+}
+
+.btn-main-post:focus-visible {
+    border: 2px solid purple;
+}
+
+.post {
+    background-color: #fff;
+    border: 1px solid #dedede;
+}
+
+.post img {
+    width: 100%;
+    padding: 0 0 20px 0;
+}
+
+.post span {
+    padding: 0 20px;
+    font-size: 15px;
+    font-weight: 300;
+}
+
+.post h3 {
+    font-size: 30px;
+    padding: 0 20px;
+}
+
+.post p {
+    padding: 0 20px;
+    font-weight: 300;
+}
+
+.post .btn-main-post{
+    margin: 20px;
+}
