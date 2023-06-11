@@ -87,3 +87,7 @@ h1 {
 .post .btn-main-post{
     margin: 20px;
 }
+
+.form-auth {
+    padding: 20px;
+}

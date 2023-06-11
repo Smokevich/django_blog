@@ -1,0 +1,32 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+<h1>Регистрация</h1>
+<div class="main-post">
+    <form method="POST" class="form-auth col-xl-7 col-xs-12">
+        {% if message %}
+        <div class="alert alert-{{ type }}" role="alert">
+            {{ message }}
+        </div>
+        {% endif %}
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="username-input" class="form-label">Имя пользователя</label>
+          <input type="text" id="username-input" name="username" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="email-input" class="form-label">Электронная почта</label>
+            <input type="email" id="email-input" name="email" class="form-control">
+            <div id="emailHelp" class="form-text">Мы не передаем вашу почту третьим лицам.</div>
+          </div>
+        <div class="mb-3">
+          <label for="password1" class="form-label">Пароль</label>
+          <input type="password" id="password1" name="password1" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="password2" class="form-label">Подтвердите пароль</label>
+            <input type="password" id="password2" name="password2" class="form-control">
+          </div>
+        <button type="submit" class="btn btn-primary">Создать аккаунт</button>
+    </form>
+</div>
+{% endblock %}
