@@ -3,11 +3,6 @@
 <h1>Регистрация</h1>
 <div class="main-post">
     <form method="POST" class="form-auth col-xl-7 col-xs-12">
-        {% if message %}
-        <div class="alert alert-{{ type }}" role="alert">
-            {{ message }}
-        </div>
-        {% endif %}
         {% csrf_token %}
         <div class="mb-3">
           <label for="username-input" class="form-label">Имя пользователя</label>
@@ -26,7 +21,7 @@
             <label for="password2" class="form-label">Подтвердите пароль</label>
             <input type="password" id="password2" name="password2" class="form-control">
           </div>
-        <button type="submit" class="btn btn-primary">Создать аккаунт</button>
+        <button type="submit" class="btn btn-dark">Создать аккаунт</button>
     </form>
 </div>
 {% endblock %}

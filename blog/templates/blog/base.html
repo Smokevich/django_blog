@@ -12,12 +12,11 @@
     <header class="p-3 mb-3 border-bottom header-menu">
         <div class="container">
           <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none">
+            <a href="{% url 'home' %}" class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none">
                 <img class="header-logo" src="{% static 'images/logo.png' %}" alt="">
-            </a>
-    
+            </a>   
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-              <li><a href="#" class="nav-link px-2 link-secondary">Главная</a></li>
+              <li><a href="{% url 'home' %}" class="nav-link px-2 link-secondary">Главная</a></li>
               <li><a href="#" class="nav-link px-2 link-body-emphasis">Все посты</a></li>
               <li><a href="#" class="nav-link px-2 link-body-emphasis">Список блогеров</a></li>
               <li><a href="#" class="nav-link px-2 link-body-emphasis">Обратная связь</a></li>
@@ -26,23 +25,67 @@
             <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
               <input type="search" class="form-control" placeholder="Поиск..." aria-label="Search">
             </form>
-    
+            {% if user.is_authenticated %}
             <div class="dropdown text-end">
               <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+                <img src="{{ request.user.userprofile.avatar.url }}" alt="mdo" width="32" height="32" class="rounded-circle">
               </a>
               <ul class="dropdown-menu text-small">
-                <li><a class="dropdown-item" href="#">Создать пост</a></li>
+                <li><a class="dropdown-item" href="{% url 'new-post' %}">Создать пост</a></li>
                 <li><a class="dropdown-item" href="#">Настройки</a></li>
-                <li><a class="dropdown-item" href="#">Профиль</a></li>
+                <li><a class="dropdown-item" href="{% url 'my-account' %}">Профиль</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#">Выйти</a></li>
+                <li><a class="dropdown-item" href="{% url 'logout' %}">Выйти</a></li>
               </ul>
+            </div>
+            {% else %}
+            <div class="text-end">
+              <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                <li><a href="{% url 'register' %}" class="nav-link px-2 link-body-emphasis">Регистрация</a></li>
+                <li><a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal" class="nav-link px-2 link-body-emphasis">Войти в аккаунт</a></li>
+              </ul>
+
+              <!-- Modal -->
+              <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content text-start">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="exampleModalLabel">Вход в аккаунт</h1>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{% url 'login' %}" method="POST">
+                      {% csrf_token %}
+                      <div class="modal-body">
+                        <div class="mb-3">
+                          <label for="inputUsername" class="form-label">Имя пользователя</label>
+                          <input type="text" name="username" class="form-control" id="inputUsername">
+                        </div>
+                        <div class="mb-3">
+                          <label for="inputPassword" class="form-label">Пароль</label>
+                          <input type="password" name="password" class="form-control" id="inputPassword">
+                        </div>                   
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                        <button type="submit" class="btn btn-dark">Войти в аккаунт</button>   
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            {% endif %}
             </div>
           </div>
         </div>
       </header>
     <div class="container">
+      {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert">
+            {{ message }}
+        </div>
+        {% endfor %}
+      {% endif %}
       {% block content %}{% endblock %}
     </div>
 

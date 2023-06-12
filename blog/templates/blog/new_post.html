@@ -1,0 +1,18 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+<h1>Создать новый пост</h1>
+<div class="main-post">
+    <form method="POST" class="p-4 col-xl-7 col-xs-12">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="title-input" class="form-label required">Название поста</label>
+          <input type="text" id="title-input" name="title" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="description-input" class="form-label">Описание поста</label>
+            <input type="text" id="description-input" name="description" class="form-control">
+          </div>
+        <button type="submit" class="btn btn-dark">Создать пост</button>
+    </form>
+</div>
+{% endblock %}

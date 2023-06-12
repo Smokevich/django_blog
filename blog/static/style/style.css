@@ -91,3 +91,7 @@ h1 {
 .form-auth {
     padding: 20px;
 }
+
+.main-post .required:after {
+    content:"*";color:red;
+  }
