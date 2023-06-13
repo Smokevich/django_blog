@@ -1,7 +1,7 @@
 {% extends 'blog/base.html' %}
 {% block content %}
 <h1>Регистрация</h1>
-<div class="main-post">
+<div class="post">
     <form method="POST" class="form-auth col-xl-7 col-xs-12">
         {% csrf_token %}
         <div class="mb-3">
@@ -20,7 +20,7 @@
         <div class="mb-3">
             <label for="password2" class="form-label">Подтвердите пароль</label>
             <input type="password" id="password2" name="password2" class="form-control">
-          </div>
+        </div>
         <button type="submit" class="btn btn-dark">Создать аккаунт</button>
     </form>
 </div>

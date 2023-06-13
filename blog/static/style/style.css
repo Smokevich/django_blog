@@ -79,7 +79,7 @@ h1 {
     padding: 0 20px;
 }
 
-.post p {
+.post .info-text {
     padding: 0 20px;
     font-weight: 300;
 }
@@ -94,4 +94,4 @@ h1 {
 
 .main-post .required:after {
     content:"*";color:red;
-  }
+}

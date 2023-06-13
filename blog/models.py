@@ -21,6 +21,9 @@ class Tag(models.Model):
 
     name = models.CharField(verbose_name='Название тега', max_length=100)
 
+    def __str__(self) -> str:
+        return self.name
+
 class Post(models.Model):
     class Meta:
         verbose_name = 'Пост'
@@ -31,7 +34,10 @@ class Post(models.Model):
     seo_keys        = models.CharField(verbose_name="Ключевые слова", max_length=300, blank=True)
     image           = models.ImageField(verbose_name='Картинка поста', upload_to='upload/images')
     text            = tinymce_models.HTMLField(verbose_name='Текст поста')
-    author_id       = models.ForeignKey(UserProfile, on_delete=models.CASCADE, verbose_name='Автор')
+    author_id       = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор')
     tag_id          = models.ForeignKey(Tag, on_delete=models.CASCADE, verbose_name='Тег')
     created_at      = models.DateTimeField(verbose_name='Пост создан', auto_now_add=True)
     is_active       = models.BooleanField(verbose_name='Включить отображение', default=False)
+
+    def __str__(self) -> str:
+        return self.name

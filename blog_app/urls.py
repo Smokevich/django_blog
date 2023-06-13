@@ -28,4 +28,5 @@ urlpatterns = [
     path('logout', views.logout_user, name='logout'),
     path('account', views.my_account, name='my-account'),
     path('new-post', views.new_post, name='new-post'),
+    path('post/<int:id_post>', views.page_post, name='post'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

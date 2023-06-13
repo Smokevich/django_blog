@@ -1,11 +1,12 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseNotFound
 from django.db import IntegrityError
-from .models import UserProfile
+from .models import UserProfile, Post, Tag
+from .forms import PostForm
 
 # Create your views here.
 def home(request):
@@ -17,12 +18,45 @@ def my_account(request):
     return render(request, 'blog/account.html')
 
 
+@login_required
 def new_post(request):
     if request.method == 'GET':
         return render(request, 'blog/new_post.html')
     elif request.method == 'POST':
-        pass
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        keywords = request.POST.get('keywords')
+        image = request.POST.get('image')
+        text = request.POST.get('text-data')
+        tags = request.POST.get('tags')
+        user = request.user
 
+        tag = Tag.objects.filter(name=tags.title()).get()
+        if not tag:
+            Tag.objects.create(name=tags.title())
+            tag = Tag.objects.filter(name=tags.title()).get()
+
+
+        post = Post.objects.create(name=title,
+                                   seo_description=description,
+                                   seo_keys=keywords,
+                                   image=image,
+                                   text=text,
+                                   author_id=user,
+                                   tag_id=tag,
+                                   )
+        
+
+        messages.add_message(request, messages.SUCCESS, 'Все отлично!')
+        return render(request, 'blog/new_post.html')
+
+
+def page_post(request, id_post):
+    post = get_object_or_404(Post, id=id_post)
+    if post.is_active:
+        return render(request, 'blog/post.html', {'post': post})
+    else:
+        return customhandler404(request)
 
 def register(request):
     if request.method == 'GET':
@@ -48,7 +82,7 @@ def register(request):
 
 def login_user(request):
     if request.method == 'GET':
-        return HttpResponseForbidden()
+        return customhandler404(request)
     elif request.method == 'POST':
         user = authenticate(request, 
                             username=request.POST.get('username'), 
@@ -67,3 +101,8 @@ def login_user(request):
 def logout_user(request):
     logout(request)
     return redirect('home')
+
+def customhandler404(request):
+    response = render(request, 'blog/404.html',)
+    response.status_code = 404
+    return response
