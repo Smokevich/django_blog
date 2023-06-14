@@ -7,38 +7,40 @@
         selector: 'textarea'
       });
 </script>
-
 <h1>Создать новый пост</h1>
-<div class="post">
-    <form method="POST" class="p-4 col-xl-7 col-xs-12">
-        {% csrf_token %}
-        <div class="mb-3">
-          <label for="title-input" class="form-label required">Название поста</label>
-          <input type="text" id="title-input" name="title" class="form-control" required>
+<div class="row">
+    <div class="col-xl-8 col-xs-12">
+        <div class="post">
+            <form method="POST" enctype="multipart/form-data" class="p-4">
+                {% csrf_token %}
+                <div class="mb-3">
+                <label for="title-input" class="form-label required">Название поста</label>
+                <input type="text" id="title-input" name="name" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="description-input" class="form-label">Описание поста</label>
+                    <input type="text" id="description-input" name="seo_description" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label for="keywords-input" class="form-label">Ключевые слова</label>
+                    <input type="text" id="keywords-input" name="seo_keys" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label for="image-input" class="form-label required">Картинка поста</label>
+                    <input type="file" id="image-input" name="image" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label for="text-input" class="form-label required">Текст поста</label>
+                    <textarea name="text" id="text-input" cols="30" rows="10"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="tags-input" class="form-label required">Теги</label>
+                    <input type="text" name="tags" id="tags-input" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-dark">Создать пост</button>
+            </form>
         </div>
-        <div class="mb-3">
-            <label for="description-input" class="form-label">Описание поста</label>
-            <input type="text" id="description-input" name="description" class="form-control">
-        </div>
-        <div class="mb-3">
-            <label for="keywords-input" class="form-label">Ключевые слова</label>
-            <input type="text" id="keywords-input" name="keywords" class="form-control">
-        </div>
-        <div class="mb-3">
-            <label for="image-input" class="form-label required">Картинка поста</label>
-            <input type="file" id="image-input" name="image" class="form-control">
-        </div>
-        <div class="mb-3">
-            <label for="text-input" class="form-label required">Текст поста</label>
-            <textarea name="text-data" id="text-input" cols="30" rows="10"></textarea>
-        </div>
-        <div class="mb-3">
-            <label for="tags-input" class="form-label required">Теги</label>
-            <input type="text" name="tags" id="tags-input" class="form-control">
-        </div>
-        
-
-        <button type="submit" class="btn btn-dark">Создать пост</button>
-    </form>
+    </div>
+    {% include 'blog/sidebar.html' %}
 </div>
 {% endblock %}
