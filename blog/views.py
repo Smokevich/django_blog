@@ -13,9 +13,15 @@ def home(request):
     return render(request, 'blog/home.html')
 
 
+def all_posts(request):
+    posts = Post.objects.filter(is_active=True)
+    return render(request, 'blog/all_posts.html', {'posts': posts})
+
+
 @login_required
 def my_account(request):
-    return render(request, 'blog/account.html')
+    posts = Post.objects.filter(author_id=request.user)
+    return render(request, 'blog/account.html', {'posts': posts})
 
 
 @login_required
@@ -23,32 +29,27 @@ def new_post(request):
     if request.method == 'GET':
         return render(request, 'blog/new_post.html')
     elif request.method == 'POST':
-        title = request.POST.get('title')
-        description = request.POST.get('description')
-        keywords = request.POST.get('keywords')
-        image = request.POST.get('image')
-        text = request.POST.get('text-data')
         tags = request.POST.get('tags')
-        user = request.user
-
-        tag = Tag.objects.filter(name=tags.title()).get()
+        tag = Tag.objects.get(name=tags.title())
         if not tag:
             Tag.objects.create(name=tags.title())
-            tag = Tag.objects.filter(name=tags.title()).get()
+            tag = Tag.objects.get(name=tags.title())
 
-
-        post = Post.objects.create(name=title,
-                                   seo_description=description,
-                                   seo_keys=keywords,
-                                   image=image,
-                                   text=text,
-                                   author_id=user,
-                                   tag_id=tag,
-                                   )
-        
+        result = PostForm(request.POST, request.FILES).save(commit=False)
+        result.author_id = request.user
+        result.tag_id = tag
+        result.save()        
 
         messages.add_message(request, messages.SUCCESS, 'Все отлично!')
         return render(request, 'blog/new_post.html')
+    
+@login_required
+def edit_post(request, id_post):
+    if request.method == 'GET':
+        post = get_object_or_404(Post, id=id_post)
+        return render(request, 'blog/new_post.html', {'post': post})
+    elif request.method == 'POST':
+        pass
 
 
 def page_post(request, id_post):

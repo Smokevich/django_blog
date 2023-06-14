@@ -139,3 +139,9 @@ TINYMCE_DEFAULT_CONFIG = {
     "custom_undo_redo_levels": 10,
     "language": "ru_RU",  # To force a specific language instead of the Django current language.
 }
+
+# Base url to serve media files
+MEDIA_URL = '/upload/'
+
+# Path where media is stored
+MEDIA_ROOT = BASE_DIR / 'upload/'
