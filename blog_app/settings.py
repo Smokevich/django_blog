@@ -107,7 +107,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ru-ru'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
@@ -140,8 +140,6 @@ TINYMCE_DEFAULT_CONFIG = {
     "language": "ru_RU",  # To force a specific language instead of the Django current language.
 }
 
-# Base url to serve media files
-MEDIA_URL = '/upload/'
-
 # Path where media is stored
 MEDIA_ROOT = BASE_DIR / 'upload/'
+

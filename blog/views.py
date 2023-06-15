@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
@@ -14,14 +14,17 @@ def home(request):
 
 
 def all_posts(request):
-    posts = Post.objects.filter(is_active=True)
+    posts = Post.objects.filter(is_active=True).order_by('-created_at')
     return render(request, 'blog/all_posts.html', {'posts': posts})
 
 
-@login_required
-def my_account(request):
-    posts = Post.objects.filter(author_id=request.user)
+def account(request, id):
+    posts = get_list_or_404(Post, author_id=id)
     return render(request, 'blog/account.html', {'posts': posts})
+
+
+def support(request):
+    return render(request, 'blog/support.html')
 
 
 @login_required
@@ -30,26 +33,54 @@ def new_post(request):
         return render(request, 'blog/new_post.html')
     elif request.method == 'POST':
         tags = request.POST.get('tags')
-        tag = Tag.objects.get(name=tags.title())
+        tag = Tag.objects.filter(name=tags.title())
         if not tag:
             Tag.objects.create(name=tags.title())
-            tag = Tag.objects.get(name=tags.title())
+        tag = Tag.objects.get(name=tags.title())
 
-        result = PostForm(request.POST, request.FILES).save(commit=False)
-        result.author_id = request.user
-        result.tag_id = tag
-        result.save()        
+        try:
+            result = PostForm(request.POST, request.FILES).save(commit=False)
+            result.author_id = request.user
+            result.tag_id = tag
+            result.is_active = True
+            result.save()        
 
-        messages.add_message(request, messages.SUCCESS, 'Все отлично!')
-        return render(request, 'blog/new_post.html')
-    
+            messages.add_message(request, messages.SUCCESS, 'Пост успешно создан!')
+            return render(request, 'blog/new_post.html')
+        except ValueError:
+            messages.add_message(request, messages.WARNING, 'Максимальная длина одного из полей была больше допустимого лимита.</br>Попробуйте сократить текст.')
+        finally:
+            return render(request, 'blog/new_post.html')
+        
+
 @login_required
 def edit_post(request, id_post):
     if request.method == 'GET':
         post = get_object_or_404(Post, id=id_post)
-        return render(request, 'blog/new_post.html', {'post': post})
+        if post.author_id != request.user:
+            return handler404(request)
+        return render(request, 'blog/edit_post.html', {'post': post})
     elif request.method == 'POST':
-        pass
+        method = request.POST.get('button')
+        post = Post.objects.get(id=id_post)
+        if post.author_id != request.user:
+            return HttpResponseNotFound
+        if method == 'delete':
+            post.delete()
+            messages.add_message(request, messages.SUCCESS, 'Пост успешно удален!')
+            return redirect('account', request.user)
+        elif method == 'change':
+            tags = request.POST.get('tags')
+            tag = Tag.objects.get(name=tags.title())
+            if not tag:
+                Tag.objects.create(name=tags.title())
+                tag = Tag.objects.get(name=tags.title())
+            result = PostForm(request.POST, request.FILES, instance=post).save(commit=False)
+            result.author_id = request.user
+            result.tag_id = tag
+            result.save()
+            messages.add_message(request, messages.SUCCESS, 'Пост успешно изменен!')
+            return redirect('post-page', id_post)
 
 
 def page_post(request, id_post):
@@ -57,7 +88,7 @@ def page_post(request, id_post):
     if post.is_active:
         return render(request, 'blog/post.html', {'post': post})
     else:
-        return customhandler404(request)
+        return handler404(request)
 
 def register(request):
     if request.method == 'GET':
@@ -83,7 +114,7 @@ def register(request):
 
 def login_user(request):
     if request.method == 'GET':
-        return customhandler404(request)
+        return handler404(request)
     elif request.method == 'POST':
         user = authenticate(request, 
                             username=request.POST.get('username'), 
@@ -103,7 +134,7 @@ def logout_user(request):
     logout(request)
     return redirect('home')
 
-def customhandler404(request):
+def handler404(request):
     response = render(request, 'blog/404.html',)
     response.status_code = 404
     return response

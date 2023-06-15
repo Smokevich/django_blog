@@ -1,13 +1,15 @@
-{% extends 'blog/base.html' %}
+{% extends 'blog/template/base.html' %}
 {% block content %}
 <h1>{{ post.name }}</h1>
 <div class="row">
     <div class="col-xl-8">
-        <div class="post p-3">
-            <img class="image-post" src="{{ post.image.url }}" alt="{{ post.name }}">
-            {{ post.text|safe }}
+        <div class="post">
+            <img class="post-image" src="{{ post.image.url }}" alt="{{ post.name }}">
+            <div class="ps-3 pe-3">
+                {{ post.text|safe }}
+            </div>
         </div>
     </div>
-    {% include 'blog/sidebar.html'%}
+    {% include 'blog/template/sidebar.html' %}
 </div>
 {% endblock %}

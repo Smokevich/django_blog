@@ -23,12 +23,24 @@ from blog import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
+
+    # Auth
     path('register/', views.register, name='register'),
     path('login', views.login_user, name='login'),
     path('logout', views.logout_user, name='logout'),
-    path('account', views.my_account, name='my-account'),
-    path('posts', views.all_posts, name='all-posts'),
+
+    # Post Links
     path('new-post', views.new_post, name='new-post'),
     path('edit-post/<int:id_post>', views.edit_post, name='edit-post'),
+
+    # Page
+    path('account/<int:id>', views.account, name='account'),
+    path('posts', views.all_posts, name='all-posts'),
     path('post/<int:id_post>', views.page_post, name='post-page'),
+    path('support', views.support, name='support')
+    
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+# handler404 = 'blog.views.handler404'
+# handler500 = 'blog.views.handler500'

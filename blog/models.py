@@ -9,7 +9,7 @@ class UserProfile(models.Model):
         verbose_name_plural = 'Аватары'
         
     user   = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    avatar = models.ImageField(verbose_name='Аватар', upload_to='upload/avatar', default='/static/images/user.png')
+    avatar = models.ImageField(verbose_name='Аватар', upload_to='upload/avatar', default='images/user.png')
 
     def __str__(self) -> str:
         return self.user.username
@@ -19,7 +19,7 @@ class Tag(models.Model):
         verbose_name = 'Тег'
         verbose_name_plural = 'Теги'
 
-    name = models.CharField(verbose_name='Название тега', max_length=100)
+    name = models.CharField(verbose_name='Название тега', max_length=100, unique=True)
 
     def __str__(self) -> str:
         return self.name
@@ -41,3 +41,11 @@ class Post(models.Model):
 
     def __str__(self) -> str:
         return self.name
+    
+class Promotion(models.Model):
+    class Meta:
+        verbose_name = 'Промо'
+        verbose_name_plural = 'Промо'
+
+    post = models.OneToOneField(Post, on_delete=models.CASCADE, verbose_name='Пост')
+    is_enabled = models.BooleanField(default=False, verbose_name='Включить промо отображение')

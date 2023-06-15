@@ -11,6 +11,11 @@ h1 {
     background-color: #fff;
 }
 
+.header-menu .active {
+    background-color: #eee;
+    border-radius: 10px;
+}
+
 .header-logo {
     width: 30px;
 }
@@ -63,7 +68,27 @@ h1 {
     border: 1px solid #dedede;
 }
 
-.post img {
+.post .author {
+    padding: 15px 0 0 0;
+}
+
+.post .link-profile{
+    padding-left: 3px;
+    text-decoration: none;
+    color: #000;
+    transition: 0.3s;
+}
+
+.post .link-profile:hover {
+    opacity: 0.7;
+}
+
+.post .date {
+    border-top: 1px solid #dedede;
+}
+
+
+.post .post-image {
     width: 100%;
     padding: 0 0 20px 0;
 }
@@ -95,10 +120,6 @@ h1 {
     margin: 20px;
 }
 
-.post .image-post {
-    /* width: 55%; */
-}
-
 .form-auth {
     padding: 20px;
 }
@@ -107,10 +128,12 @@ h1 {
     content:"*";color:red;
 }
 
-
-
-.manage-post a:hover {
-    opacity: 0.7;
+.title span {
+    font-size: 14px;
+    padding: 5px 10px;
+    margin: 0 0 0 10px;
+    position: relative;
+    bottom: 4px;
 }
 
 
