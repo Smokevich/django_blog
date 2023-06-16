@@ -93,13 +93,12 @@ h1 {
     padding: 0 0 20px 0;
 }
 
-.post span {
+/* .post h3 {
+    font-size: 30px;
     padding: 0 20px;
-    font-size: 15px;
-    font-weight: 300;
-}
+} */
 
-.post h3 {
+.post .title-block {
     font-size: 30px;
     padding: 0 20px;
 }
@@ -120,6 +119,15 @@ h1 {
     margin: 20px;
 }
 
+.post .account-image {
+    border-radius: 90px;
+    width: 150px;
+}
+
+.post .account-right{
+    padding: 0 20px;
+}
+
 .form-auth {
     padding: 20px;
 }
@@ -128,7 +136,8 @@ h1 {
     content:"*";color:red;
 }
 
-.title span {
+.badge-title {
+    font-weight: 300;
     font-size: 14px;
     padding: 5px 10px;
     margin: 0 0 0 10px;

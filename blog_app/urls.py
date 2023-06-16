@@ -29,12 +29,15 @@ urlpatterns = [
     path('login', views.login_user, name='login'),
     path('logout', views.logout_user, name='logout'),
 
+    # User Pages
+    path('account/<int:id>', views.account, name='account'),
+    path('account/settings', views.settings, name='settings'),
+
     # Post Links
     path('new-post', views.new_post, name='new-post'),
     path('edit-post/<int:id_post>', views.edit_post, name='edit-post'),
 
     # Page
-    path('account/<int:id>', views.account, name='account'),
     path('posts', views.all_posts, name='all-posts'),
     path('post/<int:id_post>', views.page_post, name='post-page'),
     path('support', views.support, name='support')

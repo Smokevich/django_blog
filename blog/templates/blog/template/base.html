@@ -1,8 +1,10 @@
+{% load custom_tags %}
+
 {% include 'blog/template/header.html' %}
     <div class="container">
       {% if messages %}
         {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}" role="alert">
+        <div class="alert alert-{{ message.tags|fix_error_type }}" role="alert">
             {{ message|safe }}
         </div>
         {% endfor %}

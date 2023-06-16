@@ -1,0 +1,26 @@
+{% extends 'blog/template/base.html' %}
+{% load static %}
+{% load custom_tags %}
+{% block content %}
+<h1>Настройки профиля</h1>
+<div class="row">
+    <div class="col-xl-8">
+        
+        <div class="post mt-3">
+            <div class="d-flex justify-content-start p-3">
+                <img class="account-image" src="{{ user.userprofile.avatar|get_avatar }}" alt="">
+                <div class="account-right">
+                    <h3>{{ user.username }}<span class="badge rounded-pill text-bg-dark badge-title">Admin</span></h3>
+                    <div class="account_info">{% if user.first_name %}{{ user.first_name }} {{ user.last_name }}{% endif%}</div>
+                    <div class="account_info">На сайте с {{ user.date_joined }}</div>
+                    <div class="account_info">Написал уже {{ count_posts }} пост{{ count_posts|pluralize:',а,ов' }}</div>
+                    <div class="account_info">Последний раз заходил {{ user.last_login }}</div>
+                    
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    {% include 'blog/template/sidebar.html' %}
+</div>
+{% endblock %}

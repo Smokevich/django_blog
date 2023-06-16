@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseNotFound
 from django.db import IntegrityError
+from django.core.mail import send_mail
 from .models import UserProfile, Post, Tag
 from .forms import PostForm
 
@@ -20,12 +21,44 @@ def all_posts(request):
 
 def account(request, id):
     posts = get_list_or_404(Post, author_id=id)
-    return render(request, 'blog/account.html', {'posts': posts})
+    user = User.objects.get(id=id)
+    return render(request, 'blog/account.html', {'user': user, 'posts': posts})
+
+@login_required
+def settings(request):
+    if request.method == 'GET':
+        user = User.objects.get(id=request.user.id)
+        count_posts = Post.objects.filter(author_id=request.user.id).count()
+        return render(request, 'blog/settings.html', {'user': user, 'count_posts': count_posts})
 
 
 def support(request):
-    return render(request, 'blog/support.html')
-
+    if request.method == 'GET':
+        return render(request, 'blog/support.html')
+    elif request.method == 'POST':
+        address = ['swapper12@gmail.com']
+        data = {'email': request.POST.get('email'),
+                'subject': request.POST.get('subject'),
+                'text': request.POST.get('text'),}
+        
+        if not data['email']:
+            messages.add_message(request, messages.ERROR, 'Вы ввели некорректную почту!')
+            return render(request, 'blog/support.html')
+        if not data['subject']:
+            messages.add_message(request, messages.ERROR, 'Вы ввели некорректную тему!')
+            return render(request, 'blog/support.html')
+        if not data['text']:
+            messages.add_message(request, messages.ERROR, 'Вы не написали текст сообщения!')
+            return render(request, 'blog/support.html')
+        try:
+            send_mail(data['subject'], data['text'], data['email'], address, False)
+            messages.add_message(request, messages.SUCCESS, 'Сообщение успешно отправлено! В ближайшее время вам ответят.')
+        except ConnectionRefusedError:
+            messages.add_message(request, messages.ERROR, 'Не удалось отправить сообщение из-за ошибки на сервере почты.')
+        except:
+            messages.add_message(request, messages.ERROR, 'Неизветсная ошибка! Попробуйте позже.')
+        finally:
+            return render(request, 'blog/support.html')
 
 @login_required
 def new_post(request):
@@ -48,7 +81,10 @@ def new_post(request):
             messages.add_message(request, messages.SUCCESS, 'Пост успешно создан!')
             return render(request, 'blog/new_post.html')
         except ValueError:
-            messages.add_message(request, messages.WARNING, 'Максимальная длина одного из полей была больше допустимого лимита.</br>Попробуйте сократить текст.')
+            messages.add_message(request, messages.ERROR, 'Максимальная длина одного из полей была больше допустимого лимита.</br>Попробуйте сократить текст.')
+        except:
+            messages.add_message(request, messages.ERROR, 'Неизвестная ошибка.')
+    
         finally:
             return render(request, 'blog/new_post.html')
         
@@ -99,7 +135,7 @@ def register(request):
         password1 = request.POST.get('password1')
         password2 = request.POST.get('password2')
         if password1 != password2:
-            messages.add_message(request, messages.WARNING, 'Пароль не совпадает, попробуйте еще раз!')
+            messages.add_message(request, messages.ERROR, 'Пароль не совпадает, попробуйте еще раз!')
             return render(request, 'blog/register.html')
         try:
             user = User.objects.create_user(username, email, password1)
@@ -108,7 +144,7 @@ def register(request):
             login(request, user)
             return redirect('home')
         except IntegrityError:
-            messages.add_message(request, messages.WARNING, 'Данный пользователь уже существует!')
+            messages.add_message(request, messages.ERROR, 'Данный пользователь уже существует!')
             return render(request, 'blog/register.html')
 
 
@@ -125,7 +161,7 @@ def login_user(request):
             messages.add_message(request, messages.SUCCESS, 'Вы успешно вошли в аккаунт!')
             return redirect('home')
         else:
-            messages.add_message(request, messages.WARNING, 'Вы ввели неверный логин или пароль!')
+            messages.add_message(request, messages.ERROR, 'Вы ввели неверный логин или пароль!')
             return redirect('home')
         
 

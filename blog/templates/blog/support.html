@@ -1,29 +1,35 @@
 {% extends 'blog/template/base.html' %}
 {% block content %}
-<h1>Регистрация</h1>
+<h1>Обратная связь</h1>
 <div class="row">
   <div class="col-xl-8 col-xs-12">
-      <div class="post">
+    <div class="post p-3 mb-3">
+        <p>NAMESITE — это уютное информационно-развлекательное сообщество, которое пользователи самостоятельно наполняют контентом. Рассказывают истории из жизни, держат в курсе новостей, делятся своим творчеством, придумывают мемы и не только.</p>
+        <p>Справочный центр – здесь можно найти ответ на свой вопрос о NAMESITE (например, как работает система блокировок и можно ли редактировать посты). Если вы не смогли решить проблему, обратитесь в службу поддержки.</p>
+        <p>Об ошибках на сайте сообщайте в Багрепорты</p>
+
+        <p>Предложения по улучшению Пикабу принимаем здесь:</p>
+        <p>По вопросам разблокировки – пишите на support@NAMESITE<br>
+        Если хотите разместить рекламу – пишите на sales@NAMESITE</p>
+    </div>
+      <div class="post pt-3">
+        <h3 class="title-block">Отправить обращение</h3>
         <form method="POST" class="form-auth">
             {% csrf_token %}
             <div class="mb-3">
-              <label for="username-input" class="form-label">Имя пользователя</label>
-              <input type="text" id="username-input" name="username" class="form-control">
-            </div>
-            <div class="mb-3">
-                <label for="email-input" class="form-label">Электронная почта</label>
+                <label for="email-input" class="form-label">Ваша почта</label>
                 <input type="email" id="email-input" name="email" class="form-control">
                 <div id="emailHelp" class="form-text">Мы не передаем вашу почту третьим лицам.</div>
               </div>
             <div class="mb-3">
-              <label for="password1" class="form-label">Пароль</label>
-              <input type="password" id="password1" name="password1" class="form-control">
+              <label for="subject" class="form-label">Тема обращения</label>
+              <input type="text" id="subject" name="subject" class="form-control">
             </div>
             <div class="mb-3">
-                <label for="password2" class="form-label">Подтвердите пароль</label>
-                <input type="password" id="password2" name="password2" class="form-control">
+                <label for="text" class="form-label">Ваше сообщение</label>
+                <textarea class="form-control" name="text" id="text" cols="30" rows="10"></textarea>
             </div>
-            <button type="submit" class="btn btn-dark">Создать аккаунт</button>
+            <button type="submit" class="btn btn-dark">Отправить</button>
         </form>
       </div>
     </div>
