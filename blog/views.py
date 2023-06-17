@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.hashers import check_password
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseNotFound
@@ -20,9 +21,12 @@ def all_posts(request):
 
 
 def account(request, id):
-    posts = get_list_or_404(Post, author_id=id)
-    user = User.objects.get(id=id)
-    return render(request, 'blog/account.html', {'user': user, 'posts': posts})
+    user = get_object_or_404(User, id=id)
+    posts = Post.objects.filter(author_id=id)
+    count_posts = Post.objects.filter(author_id=id).count()
+    if not user.is_active:
+        return handler404(request)
+    return render(request, 'blog/account.html', {'user': user, 'posts': posts, 'count_posts': count_posts})
 
 @login_required
 def settings(request):
@@ -30,6 +34,24 @@ def settings(request):
         user = User.objects.get(id=request.user.id)
         count_posts = Post.objects.filter(author_id=request.user.id).count()
         return render(request, 'blog/settings.html', {'user': user, 'count_posts': count_posts})
+    if request.method == 'POST':
+        password = request.POST.get('password')
+        if check_password(password, request.user.password):
+            user = User.objects.get(id=request.user.id)
+            button = request.POST.get('button')
+            if button == 'delete':
+                user.is_active = False
+                user.save()
+                messages.add_message(request, messages.SUCCESS, 'Аккаунт успешно удален!')
+                return redirect('home')
+            elif button == 'change':
+                messages.add_message(request, messages.SUCCESS, 'Данные успешно изменены!')
+
+            # messages.add_message(request, messages.SUCCESS, 'Пароль совпадает!')
+        else: 
+            messages.add_message(request, messages.ERROR, 'Пароль не совпадает!')
+        return redirect('settings')
+
 
 
 def support(request):

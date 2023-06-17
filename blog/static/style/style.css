@@ -83,10 +83,14 @@ h1 {
     opacity: 0.7;
 }
 
-.post .date {
+.post .border-topline {
     border-top: 1px solid #dedede;
 }
 
+.post .avatar-settings img {
+    border-radius: 90px;
+    height: 150px;
+}
 
 .post .post-image {
     width: 100%;

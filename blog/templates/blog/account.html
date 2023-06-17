@@ -3,36 +3,43 @@
 {% load custom_tags %}
 {% block content %}
 {% if request.user == posts.0.author_id %}
-<h1>Мой аккаунт {{ posts.0.author_id }}</h1>
+<h1>Мой аккаунт</h1>
 {% else %}
-<h1>Аккаунт {{ posts.0.author_id }}</h1>
+<h1>Аккаунт {{ posts.0.author_id|title }}</h1>
 {% endif %}
 <div class="row">
     <div class="col-xl-8">
-        {% for post in posts %}
         <div class="post mt-3">
-            <div class="d-flex justify-content-between p-3">
-                <div class="title">
-                    <a class="title-post" href="{% url 'post-page' post.id %}">{{ post.name }}</a>
-                    <span class="badge rounded-pill text-bg-dark badge-title">{{ post.tag_id }}</span>
-                </div>
-                {% if post.author_id == request.user %}
-                <div class="manage-post">
-                    <a href="{% url 'edit-post' post.id %}" class="btn btn-main-post mt-2">Редактировать</a>
-                </div>
-                {% else %}
-                <a class="link-profile" href="#">
-                    <div class="author">
-                        <img src="{{ post.author_id.userprofile.avatar|get_avatar }}" alt="mdo" width="32" height="32" class="rounded-circle">
-                        {{ post.author_id.username }}
+            <div class="d-flex justify-content-start p-3">
+                <img class="account-image" src="{{ user.userprofile.avatar|get_avatar }}" alt="">
+                <div class="account-right">
+                    <h3>{{ user.username|title }}<span class="badge rounded-pill text-bg-dark badge-title">
+                        {% if user.groups.all.0 %}
+                        {{ user.groups.all.0 }}
+                        {% else %}
+                        Пользователь
+                        {% endif %}
+                    </span></h3>
+                    <div class="account_info">
+                        {% if user.first_name %}
+                        {{ user.first_name }} {{ user.last_name }}
+                        {% else %}
+                        Имя Фамилия
+                        {% endif%}</div>
+                    <div class="account_info">На сайте с {{ user.date_joined }}</div>
+                    <div class="account_info">
+                        {% if count_posts > 0 %}
+                        Написал уже {{ count_posts }} пост{{ count_posts|pluralize:',а,ов' }}
+                        {% else %}
+                        В данный момент не написал ни одного поста...
+                        {% endif %}
                     </div>
-                </a>
-                {% endif %}
+                    <div class="account_info">Последний раз заходил {{ user.last_login }}</div>
+                    
+                </div>
             </div>
-            <a href="{% url 'post-page' post.id %}"><img class="post-image" src="{{ post.image.url }}" alt="{{ post.name }}"></a>
-            <div class="ps-3 pe-3">{{ post.text|safe }}</div>
         </div>
-        {% endfor %}
+        {% include 'blog/template/post_blocks.html' %}
     </div>
     {% include 'blog/template/sidebar.html' %}
 </div>

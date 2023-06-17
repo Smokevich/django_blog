@@ -1,0 +1,27 @@
+{% load custom_tags %}
+{% for post in posts %}
+<div class="post mt-3">
+    <div class="d-flex justify-content-between p-3">
+        <div class="title">
+            <a class="title-post" href="{% url 'post-page' post.id %}">{{ post.name }}</a>
+            <span class="badge rounded-pill text-bg-dark badge-title">{{ post.tag_id }}</span>
+        </div>
+        {% if post.author_id == request.user %}
+        <div class="manage-post">
+            <a href="{% url 'edit-post' post.id %}" class="btn btn-main-post mt-2">Редактировать</a>
+        </div>
+        {% else %}
+        <a class="link-profile" href="{% url 'account' post.author_id.id %}">
+            <div class="author">
+                <img src="{{ post.author_id.userprofile.avatar|get_avatar }}" alt="mdo" width="32" height="32" class="rounded-circle">
+                {{ post.author_id.username }}
+            </div>
+        </a>
+        {% endif %}
+        {{ post.author_id.userprofile.user.is_active }}  123
+    </div>
+    <a href="{% url 'post-page' post.id %}"><img class="post-image" src="{{ post.image.url }}" alt="{{ post.name }}"></a>
+    <div class="ps-3 pe-3">{{ post.text|safe|truncatechars:500 }}</div>
+    <div class="border-topline p-3 text-end">Пост опубликован: {{ post.created_at }}</div>
+</div>
+{% endfor %}

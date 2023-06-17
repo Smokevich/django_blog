@@ -9,7 +9,7 @@ class UserProfile(models.Model):
         verbose_name_plural = 'Аватары'
         
     user   = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    avatar = models.ImageField(verbose_name='Аватар', upload_to='upload/avatar', default='images/user.png')
+    avatar = models.ImageField(verbose_name='Аватар', upload_to='upload/avatar', default='')
 
     def __str__(self) -> str:
         return self.user.username
