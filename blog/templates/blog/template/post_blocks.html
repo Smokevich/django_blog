@@ -11,14 +11,22 @@
             <a href="{% url 'edit-post' post.id %}" class="btn btn-main-post mt-2">Редактировать</a>
         </div>
         {% else %}
-        <a class="link-profile" href="{% url 'account' post.author_id.id %}">
-            <div class="author">
-                <img src="{{ post.author_id.userprofile.avatar|get_avatar }}" alt="mdo" width="32" height="32" class="rounded-circle">
-                {{ post.author_id.username }}
-            </div>
-        </a>
+            {% if post.author_id.userprofile.user.is_active %}
+            <a class="link-profile" href="{% url 'account' post.author_id.id %}">
+                <div class="author">
+                    <img src="{{ post.author_id.userprofile.avatar|get_avatar }}" alt="{{ post.author_id.username }}" width="32" height="32" class="rounded-circle">
+                    {{ post.author_id.username|title }}
+                </div>
+            </a>
+            {% else %}
+            <a class="link-profile">
+                <div class="author">
+                    <img src="{{ ''|get_avatar }}" alt="Deleted" width="32" height="32" class="rounded-circle">
+                    Аккаунт удален
+                </div>
+            </a>
+            {% endif %}
         {% endif %}
-        {{ post.author_id.userprofile.user.is_active }}  123
     </div>
     <a href="{% url 'post-page' post.id %}"><img class="post-image" src="{{ post.image.url }}" alt="{{ post.name }}"></a>
     <div class="ps-3 pe-3">{{ post.text|safe|truncatechars:500 }}</div>

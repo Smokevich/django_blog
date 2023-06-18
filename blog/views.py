@@ -12,7 +12,8 @@ from .forms import PostForm
 
 # Create your views here.
 def home(request):
-    return render(request, 'blog/home.html')
+    posts = Post.objects.filter(is_active=True).order_by('-created_at')
+    return render(request, 'blog/home.html', {'posts': posts})
 
 
 def all_posts(request):

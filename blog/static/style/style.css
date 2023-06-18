@@ -72,11 +72,25 @@ h1 {
     padding: 15px 0 0 0;
 }
 
+.post .author-top-block {
+    padding: 0 20px 15px 20px;
+    text-decoration: none;
+    color: #7a7a7a;
+}
+
 .post .link-profile{
     padding-left: 3px;
     text-decoration: none;
     color: #000;
     transition: 0.3s;
+}
+
+.post .datetime {
+    padding: 0 20px;
+}
+
+.post time {
+    color: #7a7a7a;
 }
 
 .post .link-profile:hover {
@@ -95,6 +109,14 @@ h1 {
 .post .post-image {
     width: 100%;
     padding: 0 0 20px 0;
+    min-height: 285px;
+    max-height: 309px;
+    object-fit: cover;
+}
+
+.post .page-image {
+    width: 100%;
+    padding: 0 0 20px 0;
 }
 
 /* .post h3 {
@@ -104,7 +126,7 @@ h1 {
 
 .post .title-block {
     font-size: 30px;
-    padding: 0 20px;
+    padding: 10px 20px 0 20px;
 }
 
 .post .info-text {
@@ -147,6 +169,10 @@ h1 {
     margin: 0 0 0 10px;
     position: relative;
     bottom: 4px;
+}
+
+.text-body-secondary {
+    color: #c2c2c2 !important;
 }
 
 
