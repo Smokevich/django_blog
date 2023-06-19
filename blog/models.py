@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import EmailValidator, MinLengthValidator
 from tinymce import models as tinymce_models
 
 # Create your models here.
@@ -37,7 +38,7 @@ class Post(models.Model):
     author_id       = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор')
     tag_id          = models.ForeignKey(Tag, on_delete=models.CASCADE, verbose_name='Тег')
     created_at      = models.DateTimeField(verbose_name='Пост создан', auto_now_add=True)
-    is_active       = models.BooleanField(verbose_name='Включить отображение', default=False)
+    is_active       = models.BooleanField(verbose_name='Отображение на сайте', default=False)
 
     def __str__(self) -> str:
         return self.name
@@ -49,3 +50,6 @@ class Promotion(models.Model):
 
     post = models.OneToOneField(Post, on_delete=models.CASCADE, verbose_name='Пост')
     is_enabled = models.BooleanField(default=False, verbose_name='Включить промо отображение')
+
+    def __str__(self) -> str:
+        return self.post.name

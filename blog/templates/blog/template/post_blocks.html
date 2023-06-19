@@ -28,7 +28,7 @@
             {% endif %}
         {% endif %}
     </div>
-    <a href="{% url 'post-page' post.id %}"><img class="post-image" src="{{ post.image.url }}" alt="{{ post.name }}"></a>
+    <a href="{% url 'post-page' post.id %}"><img class="page-image" src="{{ post.image.url }}" alt="{{ post.name }}"></a>
     <div class="ps-3 pe-3">{{ post.text|safe|truncatechars:500 }}</div>
     <div class="border-topline p-3 text-end">Пост опубликован: {{ post.created_at }}</div>
 </div>

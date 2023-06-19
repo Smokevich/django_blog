@@ -2,25 +2,33 @@
 {% load custom_tags %}
 {% block content %}
 <h1>БЛОГ</h1>
-<div class="main-post d-flex justify-content-center">
-    <div class="col-lg-8"><img src="https://cdn.iz.ru/sites/default/files/news-2021-04/20191126_gaf_u39_1210%207.jpg" alt=""></div>
-    <div class="col-lg-4 pt-3">
-        <span>25 февраля 2022</span>
-        <h2>Главный пост</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ultrices vel ipsum sed facilisis. Nulla tristique, magna ac feugiat lacinia, elit neque porttitor sapien, suscipit iaculis ligula diam et libero.</p>
-        <a href="#" class="btn btn-main-post">Читать далее...</a>
+{% if promotion %}
+<div class="main-post d-flex justify-content-center mb-4">
+    <div class="col-lg-8"><img src="{{ promotion.post.image }}" alt="{{ promotion.post.name }}"></div>
+    <div class="col-lg-4 pt-3 pe-3">
+        <span>{{ promotion.post.created_at }}</span>
+        <h2>{{ promotion.post.name }}</h2>
+        <p>{{ promotion.post.text|striptags|truncatechars:300 }}</p>
+        <a href="{% url 'post-page' promotion.post.id %}" class="btn btn-main-post">Читать далее...</a>
     </div>
 </div>
-
-<div class="row justify-content-start gy-4 pt-4">
+{% endif %}
+<div class="row justify-content-start gy-4">
     {% for post in posts %}
     <div class="col-lg-4">
         <div class="post">
             <a href="{% url 'post-page' post.id %}"><img class="post-image" src="{{ post.image }}" alt="{{ post.name }}"></a>
+            {% if post.author_id.is_active %}
             <a class="author-top-block" href="{% url 'account' post.author_id.id %}">
-                <img src="{{ post.author_id.userprofile.avatar|get_avatar }}" alt="{{ post.author_id.username }}" width="32" height="32" class="rounded-circle">
+                <img src="{{ post.author_id.userprofile.avatar|get_avatar }}" alt="Deleted" width="32" height="32" class="rounded-circle">
                 {{ post.author_id.username|title }}
             </a>
+            {% else %}
+            <a class="author-top-block">
+                <img src="{{ ''|get_avatar }}" alt="Deleted" width="32" height="32" class="rounded-circle">
+                Аккаунт удален
+            </a>
+            {% endif %}
             <h3 class="title-block">{{ post.name }}</h3>
             <p class="info-text">{{ post.text|striptags|truncatechars:150 }}</p>
             <div class="d-flex justify-content-between card-button">

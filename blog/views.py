@@ -7,18 +7,30 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseNotFound
 from django.db import IntegrityError
 from django.core.mail import send_mail
-from .models import UserProfile, Post, Tag
+from django.core.paginator import Paginator
+from .models import UserProfile, Post, Tag, Promotion
 from .forms import PostForm
+from random import choice
 
 # Create your views here.
 def home(request):
-    posts = Post.objects.filter(is_active=True).order_by('-created_at')
-    return render(request, 'blog/home.html', {'posts': posts})
+    posts = Post.objects.filter(is_active=True).order_by('-created_at')[:11]
+    promotionValuesId = Promotion.objects.filter(is_enabled=True)
+    if promotionValuesId:
+        promotionRandomId = choice(promotionValuesId.values_list('id', flat=True))
+        promotion = Promotion.objects.get(id=promotionRandomId)
+    else:
+        promotion = None
+    return render(request, 'blog/home.html', {'posts': posts, 'promotion': promotion})
 
 
 def all_posts(request):
     posts = Post.objects.filter(is_active=True).order_by('-created_at')
-    return render(request, 'blog/all_posts.html', {'posts': posts})
+    paginator = Paginator(posts, 2)
+    pageNumber = request.GET.get('page')
+    pageObject  = paginator.get_page(pageNumber)
+
+    return render(request, 'blog/all_posts.html', {'posts': pageObject})
 
 
 def account(request, id):
@@ -88,26 +100,22 @@ def new_post(request):
     if request.method == 'GET':
         return render(request, 'blog/new_post.html')
     elif request.method == 'POST':
-        tags = request.POST.get('tags')
-        tag = Tag.objects.filter(name=tags.title())
-        if not tag:
-            Tag.objects.create(name=tags.title())
-        tag = Tag.objects.get(name=tags.title())
-
+        tags = request.POST.get('tags').strip().title()
+        if not Tag.objects.filter(name=tags):
+            Tag.objects.create(name=tags)
+        tag = Tag.objects.get(name=tags)
         try:
             result = PostForm(request.POST, request.FILES).save(commit=False)
             result.author_id = request.user
             result.tag_id = tag
             result.is_active = True
             result.save()        
-
             messages.add_message(request, messages.SUCCESS, 'Пост успешно создан!')
             return render(request, 'blog/new_post.html')
         except ValueError:
             messages.add_message(request, messages.ERROR, 'Максимальная длина одного из полей была больше допустимого лимита.</br>Попробуйте сократить текст.')
         except:
             messages.add_message(request, messages.ERROR, 'Неизвестная ошибка.')
-    
         finally:
             return render(request, 'blog/new_post.html')
         
