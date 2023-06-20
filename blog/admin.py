@@ -2,8 +2,6 @@ from django.contrib import admin
 from .models import UserProfile, Post, Tag, Promotion
 
 # Register your models here.
-admin.site.register([UserProfile])
-
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     search_fields = ['name']
@@ -11,14 +9,21 @@ class PostAdmin(admin.ModelAdmin):
     list_filter = ['is_active', 'tag_id']
 
 
+@admin.register(UserProfile)
+class UserProfileAdmin(admin.ModelAdmin):
+    search_fields = ['user__username']
+    list_display = ['user', 'avatar']
+
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
-    search_field = ['name']
+    search_fields = ['name']
 
 
 @admin.register(Promotion)
 class PromotionAdmin(admin.ModelAdmin):
 
+    search_fields = ['post__name']
+    list_display = ['post', 'is_enabled']
     list_filter = ['is_enabled']
     actions = ['make_enabled' , 'make_disabled']
 

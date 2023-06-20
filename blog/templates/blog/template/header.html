@@ -1,5 +1,6 @@
 {% load static %}
 {% load custom_tags %}
+{% load thumbnail %}
 <!doctype html>
 <html lang="en">
   <head>
@@ -32,7 +33,13 @@
             {% if user.is_authenticated %}
             <div class="dropdown text-end">
             <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="{{ request.user.userprofile.avatar|get_avatar }}" alt="mdo" width="32" height="32" class="rounded-circle">
+                {% if request.user.userprofile.avatar %}
+                {% thumbnail request.user.userprofile.avatar "100x100" crop="center" as im %}
+                    <img src="{{ im.url }}" width="32" height="32" class="rounded-circle">
+                {% endthumbnail %}
+                {% else %}
+                    <img src="{{ request.user.userprofile.avatar|get_avatar }}" alt="mdo" width="32" height="32" class="rounded-circle">
+                {% endif %}
             </a>
             <ul class="dropdown-menu text-small">
                 <li><a class="dropdown-item" href="{% url 'new-post' %}">Создать пост</a></li>

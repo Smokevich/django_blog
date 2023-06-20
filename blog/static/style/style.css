@@ -110,6 +110,8 @@ h1 {
 .post .avatar-settings img {
     border-radius: 90px;
     height: 150px;
+    width: 150px;
+    object-fit: cover;
 }
 
 .post .post-image {
@@ -162,6 +164,8 @@ h1 {
 .post .account-image {
     border-radius: 90px;
     width: 150px;
+    height: 150px;
+    object-fit: cover;
 }
 
 .post .account-right{

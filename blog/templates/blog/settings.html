@@ -1,6 +1,7 @@
 {% extends 'blog/template/base.html' %}
 {% load static %}
 {% load custom_tags %}
+{% load thumbnail %}
 {% block content %}
 <h1>Настройки профиля</h1>
 <div class="row">
@@ -20,7 +21,7 @@
         </div> -->
         
         <div class="post mt-3">
-            <form method="POST">
+            <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <h3 class="pt-3 ps-3 pe-3">Личные данные</h3>
                 <div class="d-flex justify-content-start p-3">
@@ -37,7 +38,9 @@
                 <div class="p-3">
                     <div class="">
                         <div class="avatar-settings mb-3">
-                            <img src="{{ user.userprofile.avatar|get_avatar }}" alt="">
+                            {% thumbnail user.userprofile.avatar "150x150" crop="center" as im %}
+                                <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+                            {% endthumbnail %}
                         </div>
                         <input type="file" id="avatar-input" name="avatar" class="form-control">
                     </div>

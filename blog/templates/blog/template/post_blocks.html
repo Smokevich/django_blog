@@ -1,4 +1,5 @@
 {% load custom_tags %}
+{% load thumbnail %}
 {% for post in posts %}
 <div class="post mt-3">
     <div class="d-flex justify-content-between p-3">
@@ -14,7 +15,13 @@
             {% if post.author_id.userprofile.user.is_active %}
             <a class="link-profile" href="{% url 'account' post.author_id.id %}">
                 <div class="author">
-                    <img src="{{ post.author_id.userprofile.avatar|get_avatar }}" alt="{{ post.author_id.username }}" width="32" height="32" class="rounded-circle">
+                    {% if post.author_id.userprofile.avatar %}
+                    {% thumbnail post.author_id.userprofile.avatar "100x100" crop="center" as im %}
+                        <img src="{{ im.url }}" width="32" height="32" class="rounded-circle">
+                    {% endthumbnail %}
+                    {% else %}
+                         <img src="{{ post.author_id.userprofile.avatar|get_avatar }}" alt="{{ post.author_id.username }}" width="32" height="32" class="rounded-circle">
+                    {% endif %}
                     {{ post.author_id.username|title }}
                 </div>
             </a>

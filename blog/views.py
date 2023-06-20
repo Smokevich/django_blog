@@ -58,7 +58,16 @@ def settings(request):
                 messages.add_message(request, messages.SUCCESS, 'Аккаунт успешно удален!')
                 return redirect('home')
             elif button == 'change':
-                messages.add_message(request, messages.SUCCESS, 'Данные успешно изменены!')
+                try:
+                    user.first_name = request.POST.get('first-name')
+                    user.last_name = request.POST.get('last-name')
+                    user.save()
+                    profile = UserProfile.objects.get(user_id=request.user.id)
+                    profile.avatar = request.FILES.get('avatar')
+                    profile.save()
+                    messages.add_message(request, messages.SUCCESS, 'Данные успешно изменены!')
+                except TypeError:
+                    messages.add_message(request, messages.ERROR, 'Данный формат изображения не поддерживается, попробуйте другой.')
 
             # messages.add_message(request, messages.SUCCESS, 'Пароль совпадает!')
         else: 
