@@ -9,7 +9,7 @@ from django.db import IntegrityError
 from django.core.mail import send_mail
 from django.core.paginator import Paginator
 from .models import UserProfile, Post, Tag, Promotion
-from .forms import PostForm
+from .forms import PostForm, SettingForm
 from random import choice
 
 # Create your views here.
@@ -44,9 +44,7 @@ def account(request, id):
 @login_required
 def settings(request):
     if request.method == 'GET':
-        user = User.objects.get(id=request.user.id)
-        count_posts = Post.objects.filter(author_id=request.user.id).count()
-        return render(request, 'blog/settings.html', {'user': user, 'count_posts': count_posts})
+        return render(request, 'blog/settings.html')
     if request.method == 'POST':
         password = request.POST.get('password')
         if check_password(password, request.user.password):
@@ -58,16 +56,24 @@ def settings(request):
                 messages.add_message(request, messages.SUCCESS, 'Аккаунт успешно удален!')
                 return redirect('home')
             elif button == 'change':
-                try:
-                    user.first_name = request.POST.get('first-name')
-                    user.last_name = request.POST.get('last-name')
-                    user.save()
-                    profile = UserProfile.objects.get(user_id=request.user.id)
-                    profile.avatar = request.FILES.get('avatar')
-                    profile.save()
+                user.first_name = request.POST.get('first-name')
+                user.last_name = request.POST.get('last-name')
+                if len(request.POST.get('password1')) > 5:
+                    if request.POST.get('password1') != request.POST.get('password2'):
+                        messages.add_message(request, messages.ERROR, 'Пароль не совпадает')
+                    else:
+                        user.set_password(request.POST.get('password1'))
+                    
+                profile = UserProfile.objects.get(user_id=request.user.id)
+                if request.FILES.get('image'):
+                    if 'image' in request.FILES['image'].content_type:
+                        profile.avatar = request.FILES.get('avatar')
+                        profile.save()
+                    else:
+                        messages.add_message(request, messages.ERROR, 'Данный формат изображения не поддерживается, попробуйте другой.')
+                user.save()
+                if not messages.get_messages(request):
                     messages.add_message(request, messages.SUCCESS, 'Данные успешно изменены!')
-                except TypeError:
-                    messages.add_message(request, messages.ERROR, 'Данный формат изображения не поддерживается, попробуйте другой.')
 
             # messages.add_message(request, messages.SUCCESS, 'Пароль совпадает!')
         else: 

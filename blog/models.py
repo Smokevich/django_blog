@@ -11,7 +11,9 @@ class UserProfile(models.Model):
         verbose_name_plural = 'Аватары'
         
     user   = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, verbose_name='Имя пользователя')
-    avatar = models.ImageField(verbose_name='Аватар', upload_to='upload/avatar', default='')
+    avatar = models.ImageField(verbose_name='Аватар', upload_to='upload/avatar', default='',
+                              validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png'])]
+                                )
 
     # def save(self, *args, **kwargs):
     #     if self.avatar:
