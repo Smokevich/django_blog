@@ -8,7 +8,7 @@ from django.http import HttpResponseNotFound
 from django.db import IntegrityError
 from django.core.mail import send_mail
 from django.core.paginator import Paginator
-from .models import UserProfile, Post, Tag, Promotion
+from .models import UserProfile, Post, Tag, Promotion, HistoryViews, RatingPost, RatingAuthor
 from .forms import PostForm, SettingForm
 from random import choice
 
@@ -21,7 +21,14 @@ def home(request):
         promotion = Promotion.objects.get(id=promotionRandomId)
     else:
         promotion = None
-    return render(request, 'blog/home.html', {'posts': posts, 'promotion': promotion})
+    context = {'posts': posts, 'promotion': promotion}
+    return render(request, 'blog/home.html', context)
+
+def get_sidebar():
+    postRating = RatingPost.objects.order_by('-count_views').all()[:10]
+    authorRating = RatingAuthor.objects.order_by('-count_views').all()[:10]
+    return {'postRating': postRating, 'authorRating': authorRating}
+
 
 
 def all_posts(request):
@@ -29,8 +36,17 @@ def all_posts(request):
     paginator = Paginator(posts, 2)
     pageNumber = request.GET.get('page')
     pageObject  = paginator.get_page(pageNumber)
+    sidebar = get_sidebar()
+    context = {'posts': pageObject, 'postRating': sidebar['postRating'], 'authorRating': sidebar['authorRating']}
 
-    return render(request, 'blog/all_posts.html', {'posts': pageObject})
+    return render(request, 'blog/all_posts.html', context)
+
+
+def all_users(request):
+    users = User.objects.filter(is_active=True)
+    sidebar = get_sidebar()
+    context = {'users': users, 'postRating': sidebar['postRating'], 'authorRating': sidebar['authorRating']}
+    return render(request, 'blog/all_users.html', context)
 
 
 def account(request, id):
@@ -39,12 +55,14 @@ def account(request, id):
     count_posts = Post.objects.filter(author_id=id).count()
     if not user.is_active:
         return handler404(request)
-    return render(request, 'blog/account.html', {'user': user, 'posts': posts, 'count_posts': count_posts})
+    sidebar = get_sidebar()
+    context = {'user': user, 'posts': posts, 'count_posts': count_posts, 'postRating': sidebar['postRating'], 'authorRating': sidebar['authorRating']}
+    return render(request, 'blog/account.html', context)
 
 @login_required
 def settings(request):
     if request.method == 'GET':
-        return render(request, 'blog/settings.html')
+        return render(request, 'blog/settings.html', get_sidebar())
     if request.method == 'POST':
         password = request.POST.get('password')
         if check_password(password, request.user.password):
@@ -84,7 +102,7 @@ def settings(request):
 
 def support(request):
     if request.method == 'GET':
-        return render(request, 'blog/support.html')
+        return render(request, 'blog/support.html', get_sidebar())
     elif request.method == 'POST':
         address = ['swapper12@gmail.com']
         data = {'email': request.POST.get('email'),
@@ -113,7 +131,7 @@ def support(request):
 @login_required
 def new_post(request):
     if request.method == 'GET':
-        return render(request, 'blog/new_post.html')
+        return render(request, 'blog/new_post.html', get_sidebar())
     elif request.method == 'POST':
         tags = request.POST.get('tags').strip().title()
         if not Tag.objects.filter(name=tags):
@@ -141,7 +159,9 @@ def edit_post(request, id_post):
         post = get_object_or_404(Post, id=id_post)
         if post.author_id != request.user:
             return handler404(request)
-        return render(request, 'blog/edit_post.html', {'post': post})
+        sidebar = get_sidebar()
+        context = {'post': post, 'postRating': sidebar['postRating'], 'authorRating': sidebar['authorRating']}
+        return render(request, 'blog/edit_post.html', context)
     elif request.method == 'POST':
         method = request.POST.get('button')
         post = Post.objects.get(id=id_post)
@@ -168,13 +188,28 @@ def edit_post(request, id_post):
 def page_post(request, id_post):
     post = get_object_or_404(Post, id=id_post)
     if post.is_active:
-        return render(request, 'blog/post.html', {'post': post})
+        HistoryViews.objects.create(user=request.user, post_id=post, author_id=post.author_id)
+        if not RatingPost.objects.filter(id=post):
+            RatingPost.objects.create(id=post)
+        statsPost = RatingPost.objects.get(id=post)
+        statsPost.count_views += 1
+        statsPost.save()
+
+        if not RatingAuthor.objects.filter(id=post.author_id):
+            RatingAuthor.objects.create(id=post.author_id)
+        statsAuthor = RatingAuthor.objects.get(id=post.author_id)
+        statsAuthor.count_views += 1
+        statsAuthor.save()
+
+        sidebar = get_sidebar()
+        context = {'post': post, 'postRating': sidebar['postRating'], 'authorRating': sidebar['authorRating']}
+        return render(request, 'blog/post.html', context)
     else:
         return handler404(request)
 
 def register(request):
     if request.method == 'GET':
-        return render(request, 'blog/register.html')
+        return render(request, 'blog/register.html', get_sidebar())
     elif request.method == 'POST':
         username = request.POST.get('username')
         email = request.POST.get('email')

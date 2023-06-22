@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import UserProfile, Post, Tag, Promotion
+from .models import UserProfile, Post, Tag, Promotion, HistoryViews, RatingPost, RatingAuthor
 
 # Register your models here.
 @admin.register(Post)
@@ -34,3 +34,16 @@ class PromotionAdmin(admin.ModelAdmin):
     @admin.action(description='Включить отображение')
     def make_enabled(self, request, queryset):
         queryset.update(is_enabled=True)
+
+@admin.register(HistoryViews)
+class HistoryViewsAdmin(admin.ModelAdmin):
+    search_fields = ['user', 'post_id__name']
+    list_display = ['user', 'post_id', 'author_id', 'datetime']
+
+@admin.register(RatingPost)
+class RatingPostAdmin(admin.ModelAdmin):
+    list_display = ['id', 'count_views']
+
+@admin.register(RatingAuthor)
+class RatingAuthorAdmin(admin.ModelAdmin):
+    list_display = ['id', 'count_views']

@@ -1,12 +1,16 @@
 <div class="col-xl-4">
     <div>
-        <h4>Топ месяца</h4>
+        <h4>Лучшие посты месяца</h4>
         <ul class="sidebar">
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
+            {% for post in postRating %}
+            <a href="{% url 'post-page' post.id.id %}"><li>{{ post.id.name }}</li></a>
+            {% endfor %}
+        </ul>
+        <h4>Лучшие авторы месяца</h4>
+        <ul class="sidebar">
+            {% for author in authorRating %}
+            <a href="{% url 'account' author.id.id %}"><li>{{ author.id.username|title }}</li></a>
+            {% endfor %}
         </ul>
     </div>
 </div>

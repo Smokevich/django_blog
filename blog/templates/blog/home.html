@@ -4,9 +4,10 @@
 <h1>БЛОГ</h1>
 {% if promotion %}
 <div class="main-post d-flex justify-content-center mb-4">
-    <div class="col-lg-8"><img src="{{ promotion.post.image }}" alt="{{ promotion.post.name }}"></div>
+    <div class="col-lg-8"><img class="main-img" src="{{ promotion.post.image }}" alt="{{ promotion.post.name }}"></div>
     <div class="col-lg-4 pt-3 pe-3">
         <span>{{ promotion.post.created_at }}</span>
+        <img src="{{ post.author_id.userprofile.avatar|get_avatar }}" alt="{{ post.author_id.username }}" width="32" height="32" class="rounded-circle">
         <h2>{{ promotion.post.name }}</h2>
         <p>{{ promotion.post.text|striptags|truncatechars:300 }}</p>
         <a href="{% url 'post-page' promotion.post.id %}" class="btn btn-main-post">Читать далее...</a>
@@ -20,7 +21,7 @@
             <a href="{% url 'post-page' post.id %}"><img class="post-image" src="{{ post.image }}" alt="{{ post.name }}"></a>
             {% if post.author_id.is_active %}
             <a class="author-top-block" href="{% url 'account' post.author_id.id %}">
-                <img src="{{ post.author_id.userprofile.avatar|get_avatar }}" alt="Deleted" width="32" height="32" class="rounded-circle">
+                <img src="{{ post.author_id.userprofile.avatar|get_avatar }}" alt="{{ post.author_id.username }}" width="32" height="32" class="rounded-circle">
                 {{ post.author_id.username|title }}
             </a>
             {% else %}

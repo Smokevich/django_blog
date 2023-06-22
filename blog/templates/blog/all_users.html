@@ -1,0 +1,27 @@
+{% extends 'blog/template/base.html' %}
+{% load static %}
+{% load custom_tags %}
+{% block content %}
+<div class="row">
+    <div class="col-xl-8">
+        <h1>Список пользователей</h1>
+        <a href="">
+        <div class="post mt-3">
+            <div class="d-flex justify-content-start p-3">
+                <img class="account-image-list" src="{{ user.userprofile.avatar|get_avatar }}" alt="">
+                <div class="account-right pt-1">
+                    <h3>{{ user.username|title }}<span class="badge rounded-pill text-bg-dark badge-title">
+                        {% if user.groups.all.0 %}
+                        {{ user.groups.all.0 }}
+                        {% else %}
+                        Пользователь
+                        {% endif %}
+                    </span></h3>
+                </div>
+            </div>
+        </div>
+        </a>
+    </div>
+    {% include 'blog/template/sidebar.html' %}
+</div>
+{% endblock %}

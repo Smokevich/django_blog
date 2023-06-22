@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import FileExtensionValidator
 from tinymce import models as tinymce_models
-from sorl.thumbnail import get_thumbnail
 
 # Create your models here.
 class UserProfile(models.Model):
@@ -14,11 +13,6 @@ class UserProfile(models.Model):
     avatar = models.ImageField(verbose_name='Аватар', upload_to='upload/avatar', default='',
                               validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png'])]
                                 )
-
-    # def save(self, *args, **kwargs):
-    #     if self.avatar:
-    #         self.avatar = get_thumbnail(self.original, '150x150', quality=99, crop='center').url
-    #     super(UserProfile, self).save(*args, **kwargs)
 
     def __str__(self) -> str:
         return self.user.username
@@ -63,3 +57,31 @@ class Promotion(models.Model):
 
     def __str__(self) -> str:
         return self.post.name
+    
+
+class HistoryViews(models.Model):
+    class Meta:
+        verbose_name = 'История просмотров'
+        verbose_name_plural = 'Истории просмотров'
+
+    user = models.CharField(verbose_name='Пользователь', max_length=200)
+    post_id = models.ForeignKey(Post, on_delete=models.CASCADE, verbose_name='Пост')
+    author_id = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор')
+    datetime = models.DateTimeField(verbose_name='Время входа', auto_now_add=True)
+
+
+class RatingPost(models.Model):
+    class Meta:
+        verbose_name = 'Рейтинг поста'
+        verbose_name_plural = 'Рейтинги постов'
+
+    id = models.OneToOneField(Post, on_delete=models.CASCADE, primary_key=True)
+    count_views = models.IntegerField(verbose_name='Количество просмотров', default=0)
+
+class RatingAuthor(models.Model):
+    class Meta:
+        verbose_name = 'Рейтинг автора'
+        verbose_name_plural = 'Рейтинги авторов'
+
+    id = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    count_views = models.IntegerField(verbose_name='Количество просмотров', default=0)

@@ -25,7 +25,7 @@ h1 {
     border: 1px solid #dedede;
 }
 
-.main-post img{
+.main-post .main-img{
     width: 100%;
     height: 400px;
     padding: 0 15px 0 0;
@@ -108,7 +108,7 @@ h1 {
 }
 
 .post .avatar-settings img {
-    border-radius: 90px;
+    border-radius: 50%;
     height: 150px;
     width: 150px;
     object-fit: cover;
@@ -162,9 +162,16 @@ h1 {
 }
 
 .post .account-image {
-    border-radius: 90px;
+    border-radius: 50%;
     width: 150px;
     height: 150px;
+    object-fit: cover;
+}
+
+.post .account-image-list {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
     object-fit: cover;
 }
 
@@ -193,6 +200,29 @@ h1 {
     color: #c2c2c2 !important;
 }
 
+.users-list {
+
+}
+
+
+.sidebar {
+    background: #fff;
+    border: 1px solid #dedede;
+    list-style: decimal;
+}
+
+.sidebar a {
+    text-decoration: none;
+}
+
+.sidebar li {
+    padding: 10px 0;
+    color: #7a7a7a;
+}
+
+.sidebar li:hover{ 
+    color: #b8b8b8
+}
 
 @media only screen and (max-width:850px) {
     
