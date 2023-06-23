@@ -5,10 +5,7 @@
 {% block content %}
 <div class="row">
     <div class="col-xl-8">
-        <h1>Поиск</h1>
-        {{ resultSearch }}<br>
-        {{ resultPost }}<br>
-        {{ resultUser }}
+        <h1>Поиск {{ resultSearch }}</h1>
         {% for user in users %}
         <a class="post block-user-link mt-3" href="{% url 'account' user.id %}">
             <div class="d-flex justify-content-start p-3">
@@ -30,8 +27,9 @@
                     </span></h3>
                 </div>
             </div>
-        {% endfor %}
         </a>
+        {% endfor %}
+        {% include 'blog/template/post_blocks.html' %}
     </div>
     {% include 'blog/template/sidebar.html' %}
 </div>

@@ -30,9 +30,8 @@
             <li><a href="{{ url }}" class="nav-link px-2 link-body-emphasis {% if request.path == url %}active {% endif %}">Обратная связь</a></li>
             </ul>
 
-            <form method="POST" action="search" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-                {% csrf_token %}
-                <input type="search" name="search" class="form-control" placeholder="Поиск..." aria-label="Search">
+            <form method="GET" action="search" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+                <input type="search" name="value" class="form-control" placeholder="Поиск..." aria-label="Search">
             </form>
             {% if user.is_authenticated %}
             <div class="dropdown text-end">
