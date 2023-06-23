@@ -7,9 +7,9 @@
         selector: 'textarea'
       });
 </script>
-<h1>Редактирование {{ post.name }}</h1>
 <div class="row">
     <div class="col-xl-8 col-xs-12">
+        <h1>Редактирование {{ post.name }}</h1>
         <div class="post">
             <form method="POST" enctype="multipart/form-data" class="p-4">
                 {% csrf_token %}

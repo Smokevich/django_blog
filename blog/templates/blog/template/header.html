@@ -18,17 +18,21 @@
                 <img class="header-logo" src="{% static 'images/logo.png' %}" alt="">
             </a>   
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 ms-2">
+
+            
             {% url 'home' as url %}
             <li><a href="{{ url }}" class="nav-link px-2 link-body-emphasis {% if request.path == url %}active {% endif %}">Главная</a></li>
             {% url 'all-posts' as url %}
             <li><a href="{{ url }}" class="nav-link px-2 link-body-emphasis {% if request.path == url %}active {% endif %}">Все посты</a></li>
-            <li><a href="#" class="nav-link px-2 link-body-emphasis">Список блогеров</a></li>
+            {% url 'all-users' as url %}
+            <li><a href="{{ url }}" class="nav-link px-2 link-body-emphasis {% if request.path == url %}active {% endif %}">Список блогеров</a></li>
             {% url 'support' as url %}
             <li><a href="{{ url }}" class="nav-link px-2 link-body-emphasis {% if request.path == url %}active {% endif %}">Обратная связь</a></li>
             </ul>
 
-            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-            <input type="search" class="form-control" placeholder="Поиск..." aria-label="Search">
+            <form method="POST" action="search" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+                {% csrf_token %}
+                <input type="search" name="search" class="form-control" placeholder="Поиск..." aria-label="Search">
             </form>
             {% if user.is_authenticated %}
             <div class="dropdown text-end">

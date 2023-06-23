@@ -25,12 +25,31 @@ h1 {
     border: 1px solid #dedede;
 }
 
+.main-post .author {
+    text-decoration: none;
+    color: #7a7a7a;
+    transition: 0.3s;
+}
+
+.main-post .author:hover {
+    opacity: 0.7;
+}
+
 .main-post .main-img{
     width: 100%;
     height: 400px;
-    padding: 0 15px 0 0;
     object-fit: cover;
     object-position: center;
+    transition: 0.3s;
+}
+
+.main-post .main-img:hover{
+    transform: scale(1.05);
+    opacity: 0.8;
+}
+
+.main-post time{
+    color: #7a7a7a;
 }
 
 .main-post span{
@@ -39,7 +58,7 @@ h1 {
 }
 
 .main-post h2{
-    padding: 15px 0;
+    padding: 5px 0;
     font-size: 46px;
     font-weight: 700;
 }
@@ -66,7 +85,6 @@ h1 {
 .post {
     background-color: #fff;
     border: 1px solid #dedede;
-    overflow: hidden;
 }
 
 .post .author {
@@ -74,7 +92,7 @@ h1 {
 }
 
 .post .author-top-block {
-    padding: 0 20px 15px 20px;
+    padding: 0 20px;
     text-decoration: none;
     color: #7a7a7a;
     transition: 0.3s;
@@ -116,16 +134,13 @@ h1 {
 
 .post .post-image {
     width: 100%;
-    padding: 0 0 20px 0;
-    min-height: 285px;
-    max-height: 309px;
+    height: 310px;
     object-fit: cover;
     transition: all 0.3s ease-out;
-    z-index: 1;
 }
 
 
-.post:hover .post-image  {
+.post .post-image:hover  {
     transform: scale(1.05);
     opacity: 0.8;
 }
@@ -196,31 +211,47 @@ h1 {
     bottom: 4px;
 }
 
+.badge-title-user {
+    bottom: 2px;
+}
+
 .text-body-secondary {
     color: #c2c2c2 !important;
 }
 
-.users-list {
+.block-user-link {
+    display: block;
+    color: #000;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.block-user-link:hover {
+    background-color: #dedede;
 
 }
 
+.sidebar-right {
+    margin-top: 56px;
+}
 
-.sidebar {
+
+.sidebar-block {
     background: #fff;
     border: 1px solid #dedede;
     list-style: decimal;
 }
 
-.sidebar a {
+.sidebar-block a {
     text-decoration: none;
 }
 
-.sidebar li {
+.sidebar-block li {
     padding: 10px 0;
     color: #7a7a7a;
 }
 
-.sidebar li:hover{ 
+.sidebar-block li:hover{ 
     color: #b8b8b8
 }
 

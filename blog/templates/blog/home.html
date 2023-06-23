@@ -1,16 +1,31 @@
 {% extends 'blog/template/base.html' %}
 {% load custom_tags %}
+{% load thumbnail %}
 {% block content %}
-<h1>БЛОГ</h1>
 {% if promotion %}
 <div class="main-post d-flex justify-content-center mb-4">
-    <div class="col-lg-8"><img class="main-img" src="{{ promotion.post.image }}" alt="{{ promotion.post.name }}"></div>
-    <div class="col-lg-4 pt-3 pe-3">
-        <span>{{ promotion.post.created_at }}</span>
-        <img src="{{ post.author_id.userprofile.avatar|get_avatar }}" alt="{{ post.author_id.username }}" width="32" height="32" class="rounded-circle">
+    <div class="col-lg-8 overflow-hidden">
+        <a href="{% url 'post-page' promotion.post.id %}" class="p-0">
+            <img class="main-img" src="{{ promotion.post.image }}" alt="{{ promotion.post.name }}">
+        </a>
+    </div>
+    <div class="col-lg-4 p-3">
+        <a class="author" href="{% url 'account' promotion.post.author_id.id %}">
+            {% if promotion.post.author_id.userprofile.avatar %}
+            {% thumbnail promotion.post.author_id.userprofile.avatar "150x150" crop="center" as im %}
+                    <img src="{{ im.url }}" width="32" height="32" class="rounded-circle">
+            {% endthumbnail %}
+            {% else %}
+                <img src="{{ ''|get_avatar }}" alt="{{ post.author_id.username }}" width="32" height="32" class="rounded-circle">
+            {% endif %}
+            {{ promotion.post.author_id.username|title }}
+        </a>
         <h2>{{ promotion.post.name }}</h2>
         <p>{{ promotion.post.text|striptags|truncatechars:300 }}</p>
-        <a href="{% url 'post-page' promotion.post.id %}" class="btn btn-main-post">Читать далее...</a>
+        <div class="d-flex justify-content-between">
+            <a href="{% url 'post-page' promotion.post.id %}" class="btn btn-main-post">Читать далее...</a>
+            <time class="pt-2">{{ promotion.post.created_at }}</time>
+        </div>
     </div>
 </div>
 {% endif %}
@@ -18,7 +33,10 @@
     {% for post in posts %}
     <div class="col-lg-4">
         <div class="post">
-            <a href="{% url 'post-page' post.id %}"><img class="post-image" src="{{ post.image }}" alt="{{ post.name }}"></a>
+            <div class="overflow-hidden">
+                <a href="{% url 'post-page' post.id %}"><img class="post-image" src="{{ post.image }}" alt="{{ post.name }}"></a>
+            </div>
+            <div class="mt-3">
             {% if post.author_id.is_active %}
             <a class="author-top-block" href="{% url 'account' post.author_id.id %}">
                 <img src="{{ post.author_id.userprofile.avatar|get_avatar }}" alt="{{ post.author_id.username }}" width="32" height="32" class="rounded-circle">
@@ -30,8 +48,9 @@
                 Аккаунт удален
             </a>
             {% endif %}
+            </div>
             <h3 class="title-block">{{ post.name }}</h3>
-            <p class="info-text">{{ post.text|striptags|truncatechars:150 }}</p>
+            <p class="info-text">{{ post.text|striptags|truncatechars:160 }}</p>
             <div class="d-flex justify-content-between card-button">
                 <a href="{% url 'post-page' post.id %}" class="btn btn-main-post">Читать далее...</a>
                 <time class="pt-2">{{ post.created_at }}</time>

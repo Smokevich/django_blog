@@ -49,6 +49,15 @@ def all_users(request):
     return render(request, 'blog/all_users.html', context)
 
 
+def search_page(request):
+    searchWord = request.POST.get('search')
+    searchPost = Post.objects.filter(name__contains=searchWord)
+    searchUser = User.objects.filter(username__contains=searchWord)
+    sidebar = get_sidebar()
+    context = {'resultSearch': searchWord, 'resultPost': searchPost, 'resultUser': searchUser, 'postRating': sidebar['postRating'], 'authorRating': sidebar['authorRating']}
+    return render(request, 'blog/search.html', context)
+
+
 def account(request, id):
     user = get_object_or_404(User, id=id)
     posts = Post.objects.filter(author_id=id)

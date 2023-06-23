@@ -2,13 +2,13 @@
 {% load static %}
 {% load custom_tags %}
 {% block content %}
-{% if request.user == posts.0.author_id %}
-<h1>Мой аккаунт</h1>
-{% else %}
-<h1>Аккаунт {{ posts.0.author_id|title }}</h1>
-{% endif %}
 <div class="row">
     <div class="col-xl-8">
+        {% if request.user == posts.0.author_id %}
+        <h1>Мой аккаунт</h1>
+        {% else %}
+        <h1>Аккаунт {{ posts.0.author_id|title }}</h1>
+        {% endif %}
         <div class="post mt-3">
             <div class="d-flex justify-content-start p-3">
                 <img class="account-image" src="{{ user.userprofile.avatar|get_avatar }}" alt="">

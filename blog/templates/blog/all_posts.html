@@ -1,8 +1,8 @@
 {% extends 'blog/template/base.html' %}
 {% block content %}
-<h1>Все посты</h1>
 <div class="row">
     <div class="col-xl-8">
+        <h1>Все посты</h1>
         {% include 'blog/template/post_blocks.html' %}
 
         {% if posts.paginator.num_pages != 1 %}
