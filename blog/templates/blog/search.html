@@ -6,12 +6,15 @@
 <div class="row">
     <div class="col-xl-8">
         <h1>Поиск {{ resultSearch }}</h1>
+        {% if not users and not posts %}
+        По этому запросу ничего не найдено
+        {% endif %}
         {% for user in users %}
         <a class="post block-user-link mt-3" href="{% url 'account' user.id %}">
             <div class="d-flex justify-content-start p-3">
                 {% if user.userprofile.avatar %}
                 {% thumbnail user.userprofile.avatar "150x150" crop="center" as im %}
-                                <img class="account-image-list" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+                    <img class="account-image-list" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
                 {% endthumbnail %}
                 {% else %}
                     <img class="account-image-list" src="{{ ''|get_avatar }}">

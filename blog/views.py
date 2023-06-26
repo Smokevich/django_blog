@@ -50,9 +50,12 @@ def all_users(request):
 
 
 def search_page(request):
-    searchWord = request.GET.get('value')
-    searchPost = Post.objects.filter(name__contains=searchWord)
-    searchUser = User.objects.filter(username__contains=searchWord)
+    searchWord = request.GET.get('value', '')
+    searchPost = ''
+    searchUser = ''
+    if searchWord:
+        searchPost = Post.objects.filter(name__contains=searchWord)
+        searchUser = User.objects.filter(username__contains=searchWord)
     sidebar = get_sidebar()
     context = {'resultSearch': searchWord, 'posts': searchPost, 'users': searchUser, 'postRating': sidebar['postRating'], 'authorRating': sidebar['authorRating']}
     return render(request, 'blog/search.html', context)
