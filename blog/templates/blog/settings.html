@@ -2,23 +2,13 @@
 {% load static %}
 {% load custom_tags %}
 {% load thumbnail %}
+{% block title %}Настройки профиля{% endblock title %}
+{% block seo_description %}Настройки своего профиля на % NAMESITE %{% endblock seo_description %}
+{% block seo_keys %}{% endblock seo_keys %}
 {% block content %}
 <div class="row">
     <div class="col-xl-8">
-        <h1>Настройки профиля</h1>
-        <!-- <div class="post mt-3">
-            <div class="d-flex justify-content-start p-3">
-                <img class="account-image" src="{{ user.userprofile.avatar|get_avatar }}" alt="">
-                <div class="account-right">
-                    <h3>{{ user.username }}<span class="badge rounded-pill text-bg-dark badge-title">Admin</span></h3>
-                    <div class="account_info">{% if user.first_name %}{{ user.first_name }} {{ user.last_name }}{% endif%}</div>
-                    <div class="account_info">На сайте с {{ user.date_joined }}</div>
-                    <div class="account_info">Написал уже {{ count_posts }} пост{{ count_posts|pluralize:',а,ов' }}</div>
-                    <div class="account_info">Последний раз заходил {{ user.last_login }}</div>
-                </div>
-            </div>
-        </div> -->
-        
+        <h1>Настройки профиля</h1>        
         <div class="post mt-3">
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}

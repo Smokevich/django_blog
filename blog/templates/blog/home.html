@@ -1,6 +1,9 @@
 {% extends 'blog/template/base.html' %}
 {% load custom_tags %}
 {% load thumbnail %}
+{% block title %}Главная{% endblock title %}
+{% block seo_description %}% NAMESITE % - Это то место где вы можете делится самым интересным и самым полезным из своей жизни{% endblock seo_description %}
+{% block seo_keys %}{% endblock seo_keys %}
 {% block content %}
 {% if promotion %}
 <div class="main-post d-flex justify-content-center mb-4">

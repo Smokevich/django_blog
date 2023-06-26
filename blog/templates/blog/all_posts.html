@@ -1,4 +1,7 @@
 {% extends 'blog/template/base.html' %}
+{% block title %}Все посты{% endblock title %}
+{% block seo_description %}Все посты от всех авторов на % NAMESITE %{% endblock seo_description %}
+{% block seo_keys %}Все посты на % NAMESTIRE %, Посты в % NAMESITE %, последние посты на % NAMESITE %{% endblock seo_keys %}
 {% block content %}
 <div class="row">
     <div class="col-xl-8">
@@ -11,12 +14,12 @@
                 {% if posts.has_previous %}
                     <li class="page-item">
                         <a class="page-link" href="?page=1">
-                        <span aria-hidden="true">Начало</span>
+                            <span aria-hidden="true">Начало</span>
                         </a>
                     </li>
                     <li class="page-item">
                         <a class="page-link" href="?page={{ posts.previous_page_number }}">
-                        <span aria-hidden="true">&laquo;</span>
+                            <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
                     <li class="page-item"><a class="page-link" href="?page={{ posts.previous_page_number }}">{{ posts.previous_page_number }}</a></li>
@@ -24,7 +27,7 @@
                 {% else %}
                     <li class="page-item disabled">
                         <a class="page-link" href="?page=1">
-                        <span aria-hidden="true">Начало</span>
+                            <span aria-hidden="true">Начало</span>
                         </a>
                     </li>
                     <li class="page-item disabled"><a class="page-link" href="?page={{ posts.number }}">{{ posts.number }}</a></li>
@@ -34,23 +37,23 @@
                     <li class="page-item"><a class="page-link" href="?page={{ posts.next_page_number }}">{{ posts.next_page_number }}</a></li>
                     <li class="page-item">
                         <a class="page-link" href="?page={{ posts.next_page_number }}">
-                          <span aria-hidden="true">&raquo;</span>
+                            <span aria-hidden="true">&raquo;</span>
                         </a>
                     </li>
                     <li class="page-item">
                         <a class="page-link" href="?page={{ posts.paginator.num_pages  }}"">
-                        <span aria-hidden="true">Конец</span>
+                            <span aria-hidden="true">Конец</span>
                         </a>
                     </li>
                 {% else %}
                 <li class="page-item disabled">
                     <a class="page-link" href="?page={{ posts.number }}">
-                      <span aria-hidden="true">&raquo;</span>
+                        <span aria-hidden="true">&raquo;</span>
                     </a>
                   </li>
                   <li class="page-item disabled">
                     <a class="page-link" href="?page={{ posts.paginator.num_pages }}">
-                    <span aria-hidden="true">Конец</span>
+                        <span aria-hidden="true">Конец</span>
                     </a>
                 </li>
                 {% endif %}

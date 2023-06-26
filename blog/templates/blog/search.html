@@ -2,6 +2,9 @@
 {% load static %}
 {% load custom_tags %}
 {% load thumbnail %}
+{% block title %}Поиск {{ resultSearch }}{% endblock title %}
+{% block seo_description %}Поиск по ключевому тексту - {{ resultSearch }}{% endblock seo_description %}
+{% block seo_keys %}{% endblock seo_keys %}
 {% block content %}
 <div class="row">
     <div class="col-xl-8">
@@ -19,13 +22,12 @@
                 {% else %}
                     <img class="account-image-list" src="{{ ''|get_avatar }}">
                 {% endif %}
-                <!-- <img class="account-image-list" src="{{ user.userprofile.avatar|get_avatar }}" alt=""> -->
                 <div class="account-right pt-1">
                     <h3>{{ user.username|title }}<span class="badge rounded-pill text-bg-dark badge-title badge-title-user">
                         {% if user.groups.all.0 %}
-                        {{ user.groups.all.0 }}
+                            {{ user.groups.all.0 }}
                         {% else %}
-                        Пользователь
+                            Пользователь
                         {% endif %}
                     </span></h3>
                 </div>

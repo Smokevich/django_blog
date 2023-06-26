@@ -1,6 +1,19 @@
 {% extends 'blog/template/base.html' %}
 {% load static %}
 {% load custom_tags %}
+{% block title %}
+    {% if request.user == posts.0.author_id %}
+    Мой аккаунт
+    {% else %}
+    Аккаунт {{ posts.0.author_id|title }}
+    {% endif %}
+{% endblock title %}
+{% block seo_description %}
+    Просмотр всех постов в профиле {{ posts.0.author_id|title }}
+{% endblock seo_description %}
+{% block seo_keys %}
+    личная страница {{ posts.0.author_id|title }}, все посты {{ posts.0.author_id|title }}, профиль {{ posts.0.author_id|title }}, аккаунт {{ posts.0.author_id|title }}
+{% endblock seo_keys %}
 {% block content %}
 <div class="row">
     <div class="col-xl-8">

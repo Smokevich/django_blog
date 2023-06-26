@@ -1,5 +1,8 @@
 {% extends 'blog/template/base.html' %}
 {% load static %}
+{% block title %}Написать новый пост{% endblock title %}
+{% block seo_description %}Создать новый пост на % NAMESITE %{% endblock seo_description %}
+{% block seo_keys %}{% endblock seo_keys %}
 {% block content %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.5.0/tinymce.min.js" referrerpolicy="origin"></script>
 <script>

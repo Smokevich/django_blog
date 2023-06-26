@@ -1,94 +1,82 @@
 {% load static %}
 {% load custom_tags %}
 {% load thumbnail %}
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    <link rel="stylesheet" href="{% static 'style/style.css' %}">
-  </head>
 <body>
     <header class="p-3 mb-3 border-bottom header-menu">
         <div class="container">
-        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-            <a href="{% url 'home' %}" class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none">
-                <img class="header-logo" src="{% static 'images/logo.png' %}" alt="">
-            </a>   
-            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 ms-2">
-
-            
-            {% url 'home' as url %}
-            <li><a href="{{ url }}" class="nav-link px-2 link-body-emphasis {% if request.path == url %}active {% endif %}">Главная</a></li>
-            {% url 'all-posts' as url %}
-            <li><a href="{{ url }}" class="nav-link px-2 link-body-emphasis {% if request.path == url %}active {% endif %}">Все посты</a></li>
-            {% url 'all-users' as url %}
-            <li><a href="{{ url }}" class="nav-link px-2 link-body-emphasis {% if request.path == url %}active {% endif %}">Список блогеров</a></li>
-            {% url 'support' as url %}
-            <li><a href="{{ url }}" class="nav-link px-2 link-body-emphasis {% if request.path == url %}active {% endif %}">Обратная связь</a></li>
-            </ul>
-
-            <form method="GET" action="search" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-                <input type="search" name="value" class="form-control" placeholder="Поиск..." aria-label="Search">
-            </form>
-            {% if user.is_authenticated %}
-            <div class="dropdown text-end">
-            <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                {% if request.user.userprofile.avatar %}
-                {% thumbnail request.user.userprofile.avatar "100x100" crop="center" as im %}
-                    <img src="{{ im.url }}" width="32" height="32" class="rounded-circle">
-                {% endthumbnail %}
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <a href="{% url 'home' %}" class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none">
+                    <img class="header-logo" src="{% static 'images/logo.png' %}" alt="">
+                </a>   
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 ms-2">
+                    {% url 'home' as url %}
+                    <li><a href="{{ url }}" class="nav-link px-2 link-body-emphasis {% if request.path == url %}active {% endif %}">Главная</a></li>
+                    {% url 'all-posts' as url %}
+                    <li><a href="{{ url }}" class="nav-link px-2 link-body-emphasis {% if request.path == url %}active {% endif %}">Все посты</a></li>
+                    {% url 'all-users' as url %}
+                    <li><a href="{{ url }}" class="nav-link px-2 link-body-emphasis {% if request.path == url %}active {% endif %}">Список блогеров</a></li>
+                    {% url 'support' as url %}
+                    <li><a href="{{ url }}" class="nav-link px-2 link-body-emphasis {% if request.path == url %}active {% endif %}">Обратная связь</a></li>
+                </ul>
+                <form method="GET" action="search" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+                    <input type="search" name="value" class="form-control" placeholder="Поиск..." aria-label="Search">
+                </form>
+                {% if user.is_authenticated %}
+                <div class="dropdown text-end">
+                <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    {% if request.user.userprofile.avatar %}
+                    {% thumbnail request.user.userprofile.avatar "100x100" crop="center" as im %}
+                        <img src="{{ im.url }}" width="32" height="32" class="rounded-circle">
+                    {% endthumbnail %}
+                    {% else %}
+                        <img src="{{ request.user.userprofile.avatar|get_avatar }}" alt="mdo" width="32" height="32" class="rounded-circle">
+                    {% endif %}
+                </a>
+                <ul class="dropdown-menu text-small">
+                    <li><a class="dropdown-item" href="{% url 'new-post' %}">Создать пост</a></li>
+                    <li><a class="dropdown-item" href="{% url 'settings' %}">Настройки</a></li>
+                    <li><a class="dropdown-item" href="{% url 'account' user.id %}">Профиль</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'logout' %}">Выйти</a></li>
+                </ul>
+                </div>
                 {% else %}
-                    <img src="{{ request.user.userprofile.avatar|get_avatar }}" alt="mdo" width="32" height="32" class="rounded-circle">
-                {% endif %}
-            </a>
-            <ul class="dropdown-menu text-small">
-                <li><a class="dropdown-item" href="{% url 'new-post' %}">Создать пост</a></li>
-                <li><a class="dropdown-item" href="{% url 'settings' %}">Настройки</a></li>
-                <li><a class="dropdown-item" href="{% url 'account' user.id %}">Профиль</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="{% url 'logout' %}">Выйти</a></li>
-            </ul>
-            </div>
-            {% else %}
-            <div class="text-end">
-            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                <li><a href="{% url 'register' %}" class="nav-link px-2 link-body-emphasis">Регистрация</a></li>
-                <li><a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal" class="nav-link px-2 link-body-emphasis">Войти в аккаунт</a></li>
-            </ul>
+                <div class="text-end">
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                    <li><a href="{% url 'register' %}" class="nav-link px-2 link-body-emphasis">Регистрация</a></li>
+                    <li><a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal" class="nav-link px-2 link-body-emphasis">Войти в аккаунт</a></li>
+                </ul>
 
-            <!-- Modal -->
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                <div class="modal-content text-start">
-                    <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Вход в аккаунт</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <form action="{% url 'login' %}" method="POST">
-                    {% csrf_token %}
-                    <div class="modal-body">
-                        <div class="mb-3">
-                        <label for="inputUsername" class="form-label">Имя пользователя</label>
-                        <input type="text" name="username" class="form-control" id="inputUsername">
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                    <div class="modal-content text-start">
+                        <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Вход в аккаунт</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="mb-3">
-                        <label for="inputPassword" class="form-label">Пароль</label>
-                        <input type="password" name="password" class="form-control" id="inputPassword">
-                        </div>                   
+                        <form action="{% url 'login' %}" method="POST">
+                        {% csrf_token %}
+                        <div class="modal-body">
+                            <div class="mb-3">
+                            <label for="inputUsername" class="form-label">Имя пользователя</label>
+                            <input type="text" name="username" class="form-control" id="inputUsername">
+                            </div>
+                            <div class="mb-3">
+                            <label for="inputPassword" class="form-label">Пароль</label>
+                            <input type="password" name="password" class="form-control" id="inputPassword">
+                            </div>                   
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                            <button type="submit" class="btn btn-dark">Войти в аккаунт</button>   
+                        </div>
+                        </form>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-                        <button type="submit" class="btn btn-dark">Войти в аккаунт</button>   
                     </div>
-                    </form>
                 </div>
+                {% endif %}
                 </div>
             </div>
-            {% endif %}
-            </div>
-        </div>
         </div>
     </header>

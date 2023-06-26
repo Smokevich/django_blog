@@ -1,9 +1,12 @@
 {% extends 'blog/template/base.html' %}
+{% block title %}{{ post.name }}{% endblock title %}
+{% block seo_description %}{{ post.seo_description }}{% endblock seo_description %}
+{% block seo_keys %}{{ post.seo_keys }}{% endblock seo_keys %}
 {% block content %}
-<h1>{{ post.name }}</h1>
 <div class="row">
     <div class="col-xl-8">
-        <div class="post">
+        <h1>{{ post.name }}</h1>
+        <div class="post mt-3">
             <img class="page-image" src="{{ post.image.url }}" alt="{{ post.name }}">
             <div class="ps-3 pe-3">
                 {{ post.text|safe }}

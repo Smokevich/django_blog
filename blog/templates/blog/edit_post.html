@@ -1,5 +1,8 @@
 {% extends 'blog/template/base.html' %}
 {% load static %}
+{% block title %}Редактирование {{ post.name }}{% endblock title %}
+{% block seo_description %}Редактирование поста {{ post.name }}{% endblock seo_description %}
+{% block seo_keys %}редактор поста, изменение поста, добавление информации в пост{% endblock seo_keys %}
 {% block content %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.5.0/tinymce.min.js" referrerpolicy="origin"></script>
 <script>
