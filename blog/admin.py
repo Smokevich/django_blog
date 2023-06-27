@@ -7,6 +7,7 @@ class PostAdmin(admin.ModelAdmin):
     search_fields = ['name']
     list_display = ['name', 'tag_id', 'author_id', 'is_active', 'created_at']
     list_filter = ['is_active', 'tag_id']
+    readonly_fields = ['created_at']
 
 
 @admin.register(UserProfile)
@@ -42,8 +43,10 @@ class HistoryViewsAdmin(admin.ModelAdmin):
 
 @admin.register(RatingPost)
 class RatingPostAdmin(admin.ModelAdmin):
+    search_fields = ['id__name']
     list_display = ['id', 'count_views']
 
 @admin.register(RatingAuthor)
 class RatingAuthorAdmin(admin.ModelAdmin):
+    search_fields = ['id__name']
     list_display = ['id', 'count_views']

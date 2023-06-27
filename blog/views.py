@@ -10,6 +10,7 @@ from django.core.mail import send_mail
 from django.core.paginator import Paginator
 from .models import UserProfile, Post, Tag, Promotion, HistoryViews, RatingPost, RatingAuthor
 from .forms import PostForm, SettingForm
+from datetime import datetime, timedelta
 from random import choice
 
 # Create your views here.
@@ -25,8 +26,17 @@ def home(request):
     return render(request, 'blog/home.html', context)
 
 def get_sidebar():
-    postRating = RatingPost.objects.order_by('-count_views').all()[:10]
-    authorRating = RatingAuthor.objects.order_by('-count_views').all()[:10]
+    today = datetime.now()
+    month = today - timedelta(days=30)
+    authorResult = []
+    postRating = RatingPost.objects.filter(id__created_at__range=[month, today]).order_by('-count_views')
+    for post in postRating:
+        if not post.id.author_id in authorResult:
+            authorResult.append(post.id.author_id.id)
+            
+    authorRating = RatingAuthor.objects.filter(id__in=authorResult).order_by('-count_views')
+
+
     return {'postRating': postRating, 'authorRating': authorRating}
 
 
