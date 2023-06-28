@@ -34,9 +34,10 @@ def get_sidebar():
     AuthorRatingList = RatingPost.objects.filter(post__created_at__range=[month, today]) \
                                         .values('author').annotate(views=Sum('count_views'))\
                                         .order_by('-views').values_list('author', flat=True)
-
-    AuthorQuery = User.objects.filter(id__in=AuthorRatingList)[:10]
-    return {'postRating': postRating, 'authorRating': AuthorQuery}
+    
+    AuthorQuery = User.objects.filter(id__in=AuthorRatingList)
+    AuthorQueryResult = [AuthorQuery.get(id=id) for id in AuthorRatingList] 
+    return {'postRating': postRating, 'authorRating': AuthorQueryResult}
 
 
 def all_posts(request):
