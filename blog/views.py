@@ -5,12 +5,14 @@ from django.contrib.auth.hashers import check_password
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseNotFound
+from django.db.models import Sum
 from django.db import IntegrityError
 from django.core.mail import send_mail
 from django.core.paginator import Paginator
-from .models import UserProfile, Post, Tag, Promotion, HistoryViews, RatingPost, RatingAuthor
-from .forms import PostForm, SettingForm
-from datetime import datetime, timedelta
+from .models import UserProfile, Post, Tag, Promotion, HistoryViews, RatingPost
+from .forms import PostForm
+from django.utils import timezone
+from datetime import timedelta
 from random import choice
 
 # Create your views here.
@@ -26,19 +28,15 @@ def home(request):
     return render(request, 'blog/home.html', context)
 
 def get_sidebar():
-    today = datetime.now()
+    today = timezone.now()
     month = today - timedelta(days=30)
-    authorResult = []
-    postRating = RatingPost.objects.filter(id__created_at__range=[month, today]).order_by('-count_views')
-    for post in postRating:
-        if not post.id.author_id in authorResult:
-            authorResult.append(post.id.author_id.id)
-            
-    authorRating = RatingAuthor.objects.filter(id__in=authorResult).order_by('-count_views')
+    postRating = RatingPost.objects.filter(post__created_at__range=[month, today]).order_by('-count_views')[:10]
+    AuthorRatingList = RatingPost.objects.filter(post__created_at__range=[month, today]) \
+                                        .values('author').annotate(views=Sum('count_views'))\
+                                        .order_by('-views').values_list('author', flat=True)
 
-
-    return {'postRating': postRating, 'authorRating': authorRating}
-
+    AuthorQuery = User.objects.filter(id__in=AuthorRatingList)[:10]
+    return {'postRating': postRating, 'authorRating': AuthorQuery}
 
 
 def all_posts(request):
@@ -211,17 +209,17 @@ def page_post(request, id_post):
     post = get_object_or_404(Post, id=id_post)
     if post.is_active:
         HistoryViews.objects.create(user=request.user, post_id=post, author_id=post.author_id)
-        if not RatingPost.objects.filter(id=post):
-            RatingPost.objects.create(id=post)
-        statsPost = RatingPost.objects.get(id=post)
+        if not RatingPost.objects.filter(post=post):
+            RatingPost.objects.create(post=post, author=post.author_id)
+        statsPost = RatingPost.objects.get(post=post)
         statsPost.count_views += 1
         statsPost.save()
 
-        if not RatingAuthor.objects.filter(id=post.author_id):
-            RatingAuthor.objects.create(id=post.author_id)
-        statsAuthor = RatingAuthor.objects.get(id=post.author_id)
-        statsAuthor.count_views += 1
-        statsAuthor.save()
+        # if not RatingAuthor.objects.filter(id=post.author_id):
+        #     RatingAuthor.objects.create(id=post.author_id)
+        # statsAuthor = RatingAuthor.objects.get(id=post.author_id)
+        # statsAuthor.count_views += 1
+        # statsAuthor.save()
 
         sidebar = get_sidebar()
         context = {'post': post, 'postRating': sidebar['postRating'], 'authorRating': sidebar['authorRating']}

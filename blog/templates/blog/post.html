@@ -1,14 +1,43 @@
 {% extends 'blog/template/base.html' %}
+{% load thumbnail %}
+{% load custom_tags %}
 {% block title %}{{ post.name }}{% endblock title %}
 {% block seo_description %}{{ post.seo_description }}{% endblock seo_description %}
 {% block seo_keys %}{{ post.seo_keys }}{% endblock seo_keys %}
 {% block content %}
 <div class="row">
     <div class="col-xl-8">
-        <h1>{{ post.name }}</h1>
-        <div class="post mt-3">
-            <img class="page-image" src="{{ post.image.url }}" alt="{{ post.name }}">
-            <div class="ps-3 pe-3">
+        <div class="d-flex justify-content-start">
+            <h1>{{ post.name }}</h1>
+            <span class="badge rounded-pill text-bg-dark badge-title badge-title-post">{{ post.tag_id }}</span>
+        </div>
+        <div class="post mt-2">
+            <div class="d-flex justify-content-between p-3">
+                {% if post.author_id.userprofile.user.is_active %}
+                <a class="link-profile" href="{% url 'account' post.author_id.id %}">
+                <div class="author p-0">
+                    {% if post.author_id.userprofile.avatar %}
+                        {% thumbnail post.author_id.userprofile.avatar "100x100" crop="center" as im %}
+                            <img src="{{ im.url }}" width="32" height="32" class="rounded-circle">
+                        {% endthumbnail %}
+                    {% else %}
+                         <img src="{{ post.author_id.userprofile.avatar|get_avatar }}" alt="{{ post.author_id.username }}" width="32" height="32" class="rounded-circle">
+                    {% endif %}
+                    {{ post.author_id.username|title }}
+                </div>
+                </a>
+                {% else %}
+                <a class="link-profile">
+                    <div class="author p-0">
+                        <img src="{{ ''|get_avatar }}" alt="Deleted" width="32" height="32" class="rounded-circle">
+                        Аккаунт удален
+                    </div>
+                </a>
+                {% endif %}
+                <time class="center">{{ post.created_at }}</time>
+            </div>
+            <img class="page-image p-0" src="{{ post.image.url }}" alt="{{ post.name }}">
+            <div class="p-3">
                 {{ post.text|safe }}
             </div>
         </div>

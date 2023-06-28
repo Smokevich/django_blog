@@ -42,6 +42,7 @@ class Post(models.Model):
     author_id       = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор')
     tag_id          = models.ForeignKey(Tag, on_delete=models.CASCADE, verbose_name='Тег')
     created_at      = models.DateTimeField(verbose_name='Пост создан', auto_now_add=True)
+    created_at.editable = True
     is_active       = models.BooleanField(verbose_name='Отображение на сайте', default=False)
 
     def __str__(self) -> str:
@@ -75,13 +76,9 @@ class RatingPost(models.Model):
         verbose_name = 'Рейтинг поста'
         verbose_name_plural = 'Рейтинги постов'
 
-    id = models.OneToOneField(Post, on_delete=models.CASCADE, primary_key=True)
+    post = models.OneToOneField(Post, on_delete=models.CASCADE, primary_key=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     count_views = models.IntegerField(verbose_name='Количество просмотров', default=0)
 
-class RatingAuthor(models.Model):
-    class Meta:
-        verbose_name = 'Рейтинг автора'
-        verbose_name_plural = 'Рейтинги авторов'
-
-    id = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    count_views = models.IntegerField(verbose_name='Количество просмотров', default=0)
+    def __str__(self) -> str:
+        return f'{self.post} | {self.author}'

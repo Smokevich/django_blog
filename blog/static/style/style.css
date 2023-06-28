@@ -87,6 +87,10 @@ h1 {
     border: 1px solid #dedede;
 }
 
+.post .center {
+    padding: 2px 0 0 0;
+}
+
 .post .author {
     padding: 15px 0 0 0;
 }
@@ -209,6 +213,11 @@ h1 {
     margin: 0 0 0 10px;
     position: relative;
     bottom: 4px;
+}
+
+.badge-title-post {
+    height: 27px;
+    margin: 40px 0 0 10px;
 }
 
 .badge-title-user {

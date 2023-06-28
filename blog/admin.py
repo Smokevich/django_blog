@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import UserProfile, Post, Tag, Promotion, HistoryViews, RatingPost, RatingAuthor
+from .models import UserProfile, Post, Tag, Promotion, HistoryViews, RatingPost
 
 # Register your models here.
 @admin.register(Post)
@@ -7,7 +7,7 @@ class PostAdmin(admin.ModelAdmin):
     search_fields = ['name']
     list_display = ['name', 'tag_id', 'author_id', 'is_active', 'created_at']
     list_filter = ['is_active', 'tag_id']
-    readonly_fields = ['created_at']
+    # readonly_fields = ['created_at']
 
 
 @admin.register(UserProfile)
@@ -43,10 +43,5 @@ class HistoryViewsAdmin(admin.ModelAdmin):
 
 @admin.register(RatingPost)
 class RatingPostAdmin(admin.ModelAdmin):
-    search_fields = ['id__name']
-    list_display = ['id', 'count_views']
-
-@admin.register(RatingAuthor)
-class RatingAuthorAdmin(admin.ModelAdmin):
-    search_fields = ['id__name']
-    list_display = ['id', 'count_views']
+    search_fields = ['post__name']
+    list_display = ['post', 'author', 'count_views']
