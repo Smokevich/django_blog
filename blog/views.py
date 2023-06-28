@@ -36,7 +36,7 @@ def get_sidebar():
                                         .order_by('-views').values_list('author', flat=True)
     
     AuthorQuery = User.objects.filter(id__in=AuthorRatingList)
-    AuthorQueryResult = [AuthorQuery.get(id=id) for id in AuthorRatingList] 
+    AuthorQueryResult = [AuthorQuery.get(id=id) for id in AuthorRatingList][:10]
     return {'postRating': postRating, 'authorRating': AuthorQueryResult}
 
 
