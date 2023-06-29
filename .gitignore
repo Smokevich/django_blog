@@ -6,6 +6,7 @@
 *.pot
 *.pyc
 *.jpg
+*.webp
 *.txt
 __pycache__/
 local_settings.py
