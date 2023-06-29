@@ -9,7 +9,7 @@
     <div class="col-xl-8">
         <div class="d-flex justify-content-start">
             <h1>{{ post.name }}</h1>
-            <span class="badge rounded-pill text-bg-dark badge-title badge-title-post">{{ post.tag_id }}</span>
+            <a href="{% url 'tag-posts' post.tag_id %}" class="badge rounded-pill text-bg-dark badge-title badge-title-post badge-title-link">{{ post.tag_id }}</a>
         </div>
         <div class="post mt-2">
             <div class="d-flex justify-content-between p-3">
@@ -37,9 +37,11 @@
                 <time class="center">{{ post.created_at }}</time>
             </div>
             <img class="page-image p-0" src="{{ post.image.url }}" alt="{{ post.name }}">
+            {% if post.text %}
             <div class="p-3">
                 {{ post.text|safe }}
             </div>
+            {% endif %}
         </div>
     </div>
     {% include 'blog/template/sidebar.html' %}

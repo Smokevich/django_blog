@@ -82,6 +82,16 @@ h1 {
     border: 2px solid purple;
 }
 
+.list-post-img{
+    transition: 0.3s;
+}
+
+.list-post-img:hover{
+    transform: scale(1.05);
+    opacity: 0.8;
+}
+
+
 .post {
     background-color: #fff;
     border: 1px solid #dedede;
@@ -151,7 +161,6 @@ h1 {
 
 .post .page-image {
     width: 100%;
-    padding: 0 0 20px 0;
 }
 
 /* .post h3 {
@@ -202,7 +211,7 @@ h1 {
     padding: 20px;
 }
 
-.main-post .required:after {
+.required:after {
     content:"*";color:red;
 }
 
@@ -213,7 +222,19 @@ h1 {
     margin: 0 0 0 10px;
     position: relative;
     bottom: 4px;
+    text-decoration: none;
 }
+
+.badge-title-link{
+    background: linear-gradient(to left, #5b5b5b 50%, #000 50%) right;
+    background-size: 200%;
+    transition: .5s ease-out;
+}
+
+.badge-title-link:hover{
+    background-position: left;
+}
+
 
 .badge-title-post {
     height: 27px;

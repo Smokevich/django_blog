@@ -5,7 +5,7 @@
     <div class="d-flex justify-content-between p-3">
         <div class="title">
             <a class="title-post" href="{% url 'post-page' post.id %}">{{ post.name }}</a>
-            <span class="badge rounded-pill text-bg-dark badge-title">{{ post.tag_id }}</span>
+            <a href="{% url 'tag-posts' post.tag_id.name %}" class="badge rounded-pill text-bg-dark badge-title badge-title-link">{{ post.tag_id.name }}</a>
         </div>
         {% if post.author_id == request.user %}
         <div class="manage-post">
@@ -35,8 +35,10 @@
             {% endif %}
         {% endif %}
     </div>
-    <a href="{% url 'post-page' post.id %}"><img class="page-image" src="{{ post.image.url }}" alt="{{ post.name }}"></a>
-    <div class="ps-3 pe-3">{{ post.text|safe|truncatechars:500 }}</div>
+    <div class="overflow-hidden">
+        <a href="{% url 'post-page' post.id %}"><img class="page-image list-post-img" src="{{ post.image.url }}" alt="{{ post.name }}"></a>
+    </div>
+    <div class="p-3">{{ post.text|safe|truncatechars:500 }}</div>
     <div class="border-topline p-3 text-end">Пост опубликован: {{ post.created_at }}</div>
 </div>
 {% endfor %}

@@ -11,7 +11,7 @@ class UserProfile(models.Model):
         
     user   = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, verbose_name='Имя пользователя')
     avatar = models.ImageField(verbose_name='Аватар', upload_to='upload/avatar', default='',
-                              validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png'])]
+                              validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'webp'])]
                                 )
 
     def __str__(self) -> str:
@@ -36,9 +36,9 @@ class Post(models.Model):
     seo_description = models.CharField(verbose_name='Описание поста', max_length=200, blank=True)
     seo_keys        = models.CharField(verbose_name="Ключевые слова", max_length=300, blank=True)
     image           = models.ImageField(verbose_name='Картинка поста', upload_to='upload/images', 
-                                        validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png'])]
+                                        validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'webp'])]
                                         )
-    text            = tinymce_models.HTMLField(verbose_name='Текст поста')
+    text            = tinymce_models.HTMLField(verbose_name='Текст поста', blank=True)
     author_id       = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор')
     tag_id          = models.ForeignKey(Tag, on_delete=models.CASCADE, verbose_name='Тег')
     created_at      = models.DateTimeField(verbose_name='Пост создан', auto_now_add=True)

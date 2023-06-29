@@ -1,11 +1,11 @@
 {% extends 'blog/template/base.html' %}
-{% block title %}Все посты{% endblock title %}
-{% block seo_description %}Все посты от всех авторов на % NAMESITE %{% endblock seo_description %}
-{% block seo_keys %}Все посты на % NAMESTIRE %, Посты в % NAMESITE %, последние посты на % NAMESITE %{% endblock seo_keys %}
+{% block title %}{{ title }}{% endblock title %}
+{% block seo_description %}{{ description }}{% endblock seo_description %}
+{% block seo_keys %}{{ keys }}{% endblock seo_keys %}
 {% block content %}
 <div class="row">
     <div class="col-xl-8">
-        <h1>Все посты</h1>
+        <h1>{{ title }}</h1>
         {% include 'blog/template/post_blocks.html' %}
 
         {% if posts.paginator.num_pages != 1 %}

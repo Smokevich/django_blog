@@ -12,35 +12,47 @@
 </script>
 <div class="row">
     <div class="col-xl-8 col-xs-12">
+        {% if post %}
+        <h1>Редактирование поста</h1>
+        {% else %}
         <h1>Создать новый пост</h1>
+        {% endif %}
         <div class="post mt-3">
             <form method="POST" enctype="multipart/form-data" class="p-4">
                 {% csrf_token %}
                 <div class="mb-3">
                 <label for="title-input" class="form-label required">Название поста</label>
-                <input type="text" id="title-input" name="name" class="form-control" required>
+                <input type="text" id="title-input" name="name" {% if post %}value="{{ post.name }} "{% endif %}class="form-control" required>
                 </div>
                 <div class="mb-3">
                     <label for="description-input" class="form-label">Описание поста</label>
-                    <input type="text" id="description-input" name="seo_description" class="form-control">
+                    <input type="text" id="description-input" name="seo_description" {% if post %}value="{{ post.seo_description }} "{% endif %}class="form-control">
                 </div>
                 <div class="mb-3">
                     <label for="keywords-input" class="form-label">Ключевые слова</label>
-                    <input type="text" id="keywords-input" name="seo_keys" class="form-control">
+                    <input type="text" id="keywords-input" name="seo_keys" {% if post %}value="{{ post.seo_keys }} "{% endif %}class="form-control">
                 </div>
                 <div class="mb-3">
                     <label for="image-input" class="form-label required">Картинка поста</label>
-                    <input type="file" id="image-input" name="image" class="form-control">
+                    {% if post %}<img class="page-image mb-3" src="{{ post.image.url }}" alt="">{% endif %}
+                    <input type="file" id="image-input" name="image" {% if post %}value="{{ post.image }} "{% endif %}class="form-control">
                 </div>
                 <div class="mb-3">
-                    <label for="text-input" class="form-label required">Текст поста</label>
-                    <textarea name="text" id="text-input" cols="30" rows="10"></textarea>
+                    <label for="text-input" class="form-label">Текст поста</label>
+                    <textarea name="text" id="text-input" cols="30" rows="10">{% if post %}{{ post.text }}{% endif %}</textarea>
                 </div>
                 <div class="mb-3">
                     <label for="tags-input" class="form-label required">Теги</label>
-                    <input type="text" name="tags" id="tags-input" class="form-control">
+                    <input type="text" name="tags" id="tags-input" {% if post %}value="{{ post.tag_id }} "{% endif %}class="form-control">
                 </div>
+                {% if post %}
+                <div class="d-flex justify-content-between">
+                    <button type="submit" name="button" value="change" class="btn btn-dark">Изменить пост</button>
+                    <button type="submit" name="button" value="delete" class="btn btn-danger">Удалить пост</button>
+                </div>
+                {% else %}
                 <button type="submit" class="btn btn-dark">Создать пост</button>
+                {% endif %}
             </form>
         </div>
     </div>

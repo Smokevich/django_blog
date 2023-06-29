@@ -41,13 +41,45 @@ def get_sidebar():
 
 
 def all_posts(request):
+    title = 'Все посты'
+    seoDescription = 'Все посты от всех авторов на % NAMESITE %'
+    seoKeys = 'Все посты на % NAMESTIRE %, Посты в % NAMESITE %, последние посты на % NAMESITE %'
     posts = Post.objects.filter(is_active=True).order_by('-created_at')
-    paginator = Paginator(posts, 2)
+    paginator = Paginator(posts, 10)
     pageNumber = request.GET.get('page')
     pageObject  = paginator.get_page(pageNumber)
     sidebar = get_sidebar()
-    context = {'posts': pageObject, 'postRating': sidebar['postRating'], 'authorRating': sidebar['authorRating']}
+    context = {
+        'title': title, 
+        'description': seoDescription, 
+        'keys': seoKeys ,
+        'posts': pageObject, 
+        'postRating': sidebar['postRating'], 
+        'authorRating': sidebar['authorRating']
+        }
 
+    return render(request, 'blog/all_posts.html', context)
+
+
+def tag_posts(request, tag):
+    tag = tag.lower()
+    title = f'Посты по тегу {tag}'
+    seoDescription = f'Посты от всех авторов по тегу {tag} на % NAMESITE %'
+    seoKeys = f'{tag} на % NAMESTIRE %, посты по тегу {tag} % NAMESITE %, последние посты с темой {tag}'
+    tagQuery = get_object_or_404(Tag, name=tag.title())
+    posts = Post.objects.filter(tag_id=tagQuery)
+    paginator = Paginator(posts, 10)
+    pageNumber = request.GET.get('page')
+    pageObject  = paginator.get_page(pageNumber)
+    sidebar = get_sidebar()
+    context = {
+        'title': title, 
+        'description': seoDescription, 
+        'keys': seoKeys ,
+        'posts': pageObject, 
+        'postRating': sidebar['postRating'], 
+        'authorRating': sidebar['authorRating']
+        }
     return render(request, 'blog/all_posts.html', context)
 
 
@@ -165,13 +197,13 @@ def new_post(request):
             result.is_active = True
             result.save()        
             messages.add_message(request, messages.SUCCESS, 'Пост успешно создан!')
-            return render(request, 'blog/new_post.html')
+            return redirect('post-page', result.id)
         except ValueError:
             messages.add_message(request, messages.ERROR, 'Максимальная длина одного из полей была больше допустимого лимита.</br>Попробуйте сократить текст.')
+            return render(request, 'blog/new_post.html', get_sidebar())
         except:
             messages.add_message(request, messages.ERROR, 'Неизвестная ошибка.')
-        finally:
-            return render(request, 'blog/new_post.html')
+            return render(request, 'blog/new_post.html', get_sidebar())
         
 
 @login_required
@@ -182,7 +214,7 @@ def edit_post(request, id_post):
             return handler404(request)
         sidebar = get_sidebar()
         context = {'post': post, 'postRating': sidebar['postRating'], 'authorRating': sidebar['authorRating']}
-        return render(request, 'blog/edit_post.html', context)
+        return render(request, 'blog/new_post.html', context)
     elif request.method == 'POST':
         method = request.POST.get('button')
         post = Post.objects.get(id=id_post)
@@ -194,13 +226,12 @@ def edit_post(request, id_post):
             return redirect('account', request.user)
         elif method == 'change':
             tags = request.POST.get('tags')
-            tag = Tag.objects.get(name=tags.title())
+            tag = Tag.objects.filter(name=tags.title())
             if not tag:
                 Tag.objects.create(name=tags.title())
                 tag = Tag.objects.get(name=tags.title())
+
             result = PostForm(request.POST, request.FILES, instance=post).save(commit=False)
-            result.author_id = request.user
-            result.tag_id = tag
             result.save()
             messages.add_message(request, messages.SUCCESS, 'Пост успешно изменен!')
             return redirect('post-page', id_post)
@@ -215,13 +246,6 @@ def page_post(request, id_post):
         statsPost = RatingPost.objects.get(post=post)
         statsPost.count_views += 1
         statsPost.save()
-
-        # if not RatingAuthor.objects.filter(id=post.author_id):
-        #     RatingAuthor.objects.create(id=post.author_id)
-        # statsAuthor = RatingAuthor.objects.get(id=post.author_id)
-        # statsAuthor.count_views += 1
-        # statsAuthor.save()
-
         sidebar = get_sidebar()
         context = {'post': post, 'postRating': sidebar['postRating'], 'authorRating': sidebar['authorRating']}
         return render(request, 'blog/post.html', context)
