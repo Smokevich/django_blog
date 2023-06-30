@@ -4,11 +4,12 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.hashers import check_password
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseNotFound
+from django.http import HttpResponseNotFound, JsonResponse
 from django.db.models import Sum
 from django.db import IntegrityError
 from django.core.mail import send_mail
 from django.core.paginator import Paginator
+from django.template.loader import render_to_string
 from .models import UserProfile, Post, Tag, Promotion, HistoryViews, RatingPost
 from .forms import PostForm
 from django.utils import timezone
@@ -90,6 +91,24 @@ def all_users(request):
     return render(request, 'blog/all_users.html', context)
 
 
+def get_search(request):
+    ajax = request.headers.get("x-requested-with") == "XMLHttpRequest"
+    if ajax:
+        searchWord = request.GET.get('value', '')
+        if len(searchWord) > 1:
+            searchPost = Post.objects.filter(name__contains=searchWord)
+        else:
+            searchPost = None
+                
+
+        html = render_to_string(
+                    'blog/live_search.html',
+                    {'results': searchPost}
+                )
+        dataDict = {'html_from_view': html}
+        return JsonResponse(dataDict, safe=False)
+    return handler404(request)
+
 def search_page(request):
     searchWord = request.GET.get('value', '')
     searchPost = ''
@@ -97,6 +116,7 @@ def search_page(request):
     if searchWord:
         searchPost = Post.objects.filter(name__contains=searchWord)
         searchUser = User.objects.filter(username__contains=searchWord)
+
     sidebar = get_sidebar()
     context = {'resultSearch': searchWord, 'posts': searchPost, 'users': searchUser, 'postRating': sidebar['postRating'], 'authorRating': sidebar['authorRating']}
     return render(request, 'blog/search.html', context)

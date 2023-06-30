@@ -7,10 +7,7 @@
 {% block content %}
 <div class="row">
     <div class="col-xl-8">
-        <div class="d-flex justify-content-start">
-            <h1>{{ post.name }}</h1>
-            <a href="{% url 'tag-posts' post.tag_id %}" class="badge rounded-pill text-bg-dark badge-title badge-title-post badge-title-link">{{ post.tag_id }}</a>
-        </div>
+            <h1>{{ post.name }}<a href="{% url 'tag-posts' post.tag_id %}" class="badge rounded-pill text-bg-dark badge-title badge-title-post badge-title-link">{{ post.tag_id }}</a></h1>
         <div class="post mt-2">
             <div class="d-flex justify-content-between p-3">
                 {% if post.author_id.userprofile.user.is_active %}

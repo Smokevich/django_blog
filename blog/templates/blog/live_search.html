@@ -1,0 +1,14 @@
+{% if results %}
+<div class="live-search-block">
+  <ul>
+  {% for result in results %}
+    <a href="{% url 'post-page' result.id %}"><li>{{ result.name }}</li></a>
+  {% endfor %}
+  </ul>
+</div>
+{% else %}
+  {% if result == None %}
+  {% else %}
+  <p>No artists found.</p>
+  {% endif %}
+{% endif %}

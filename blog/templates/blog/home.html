@@ -52,7 +52,7 @@
             </a>
             {% endif %}
             </div>
-            <h3 class="title-block">{{ post.name }}</h3>
+            <h3 class="title-block">{{ post.name|truncatechars:30 }}</h3>
             <p class="info-text">{{ post.text|striptags|truncatechars:160 }}</p>
             <div class="d-flex justify-content-between card-button">
                 <a href="{% url 'post-page' post.id %}" class="btn btn-main-post">Читать далее...</a>

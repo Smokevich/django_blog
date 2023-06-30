@@ -3,7 +3,7 @@ body {
 }
 
 h1 {
-    font-size: 64px;
+    font-size: 36px;
     font-weight: 700;
 }
 
@@ -18,6 +18,35 @@ h1 {
 
 .header-logo {
     width: 30px;
+}
+
+.live-search-block {
+    position: absolute;
+    margin: 5px 0 0 0;
+    background-color: #fff;
+    width: 206px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.live-search-block ul {
+    list-style: none;
+    margin: 0;
+    padding: 0px;
+}
+
+.live-search-block ul li {
+    padding: 5px 10px;
+    color: #000;
+    transition: 0.3s;
+}
+
+.live-search-block a {
+    text-decoration: none;
+}
+
+.live-search-block ul li:hover {
+    background-color: #e4e4e4;
 }
 
 .main-post {
@@ -169,7 +198,7 @@ h1 {
 } */
 
 .post .title-block {
-    font-size: 30px;
+    font-size: 22px;
     padding: 10px 20px 0 20px;
 }
 
@@ -238,7 +267,7 @@ h1 {
 
 .badge-title-post {
     height: 27px;
-    margin: 40px 0 0 10px;
+    margin: 18px 0 6px 10px;
 }
 
 .badge-title-user {
@@ -258,11 +287,10 @@ h1 {
 
 .block-user-link:hover {
     background-color: #dedede;
-
 }
 
 .sidebar-right {
-    margin-top: 56px;
+    margin-top: 23px;
 }
 
 
